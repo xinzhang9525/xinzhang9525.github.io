@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="">
+  <meta name="description" content="chattr命令用法详细介绍，实例演示">
   <meta name="author" content="Xin Zhang">
   <meta name="keywords" content="">
   
-  <title>Hello World - Hexo-blog</title>
+  <title>Linux chattr 命令详解 - Hexo-blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Hello World">
+            <span class="h2" id="subtitle" title="Linux chattr 命令详解">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-09-15 14:05" pubdate>
-        2021年9月15日 下午
+      <time datetime="2021-08-06 09:00" pubdate>
+        2021年8月6日 上午
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      75 字
+      724 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      8
        分钟
     </span>
   
@@ -225,27 +225,63 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hello World</h1>
+            <h1 style="display: none">Linux chattr 命令详解</h1>
             
             <div class="markdown-body">
-              <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+              <h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><blockquote>
+<p>chattr命令用于更改Linux文件的属性，比如设置文件为不可删除、只读等类型。只有具有sudo权限的用户才能执行这项命令。chattr可看成是change attributes的缩写：ch+attr</p>
+<p>lsattr可查看chattr命令执行后的文件属性</p>
+</blockquote>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">chattr [ -RVf ] [ -v version ] [ mode ] files<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs bash">可选参数：[ -RVf ] 和 [-v version]<br>-R: 递归处理，将指定目录下的所有文件及子目录一并处理.<br>-V: 显示输出指令执行过程<br>-f: 若该文件权限无法被更改也不要显示错误讯息<br>-v version: 设置文件或目录版本<br><br><br>必选参数：[ mode ]<br>+&lt;属性&gt;：开启文件的该项属性<br>-&lt;属性&gt;：关闭文件的该项属性<br>=&lt;属性&gt;：使得文件只有该项属性<br><br><br>属性：<br>a: 针对文件：只允许程序在文件后面追加数据。针对文件夹：只允许创建和修改文件内容，但不允许删除<br>A: 告诉系统不修改该文件的最后访问时间，以减小磁盘I/O负载<br>b: 不更新文件的最后存取时间<br>c: 将文件或目录压缩后存放<br>C: 不执行写入时复制，多个用户对同一资源进行写操作时，不生成副本<br>d: 当dump程序执行时，该文件或目录不会被dump备份<br>D: 同步更新文件或目录<br>e: 使用extent文件格式<br>i: 不得任意改动文件或目录<br>j: 数据在写入到文件前暂存到journal<br>s: 保密性删除文件或目录<br>S: 及时更新文件或目录<br>t: 不支持文件尾部合并<br>T: 使得目录下的文件存放位置不存在联系，因为一般而言，同一目录下的文件在硬盘上的存放位置越相邻越好<br>u: 预防意外删除<br><br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+
+<h3 id="示例大全"><a href="#示例大全" class="headerlink" title="示例大全"></a>示例大全</h3><h4 id="设置文件为只读、不可删除"><a href="#设置文件为只读、不可删除" class="headerlink" title="设置文件为只读、不可删除"></a>设置文件为只读、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># test.txt文件</span><br>sudo chattr +i test.txt<br></code></pre></td></tr></table></figure>
+
+<h4 id="设置目录下的所有文件为只读、不可删除"><a href="#设置目录下的所有文件为只读、不可删除" class="headerlink" title="设置目录下的所有文件为只读、不可删除"></a>设置目录下的所有文件为只读、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># home目录</span><br>sudo chattr -R +i /home/<br></code></pre></td></tr></table></figure>
+
+<h4 id="设置文件为只能追加、不可删除"><a href="#设置文件为只能追加、不可删除" class="headerlink" title="设置文件为只能追加、不可删除"></a>设置文件为只能追加、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo chattr +a test.txt<br></code></pre></td></tr></table></figure>
+
+<h4 id="设置目录下的所有文件只能追加、不可删除"><a href="#设置目录下的所有文件只能追加、不可删除" class="headerlink" title="设置目录下的所有文件只能追加、不可删除"></a>设置目录下的所有文件只能追加、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo chattr -R +a /home/<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="取消文件的只读、不可删除"><a href="#取消文件的只读、不可删除" class="headerlink" title="取消文件的只读、不可删除"></a>取消文件的只读、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># test.txt文件</span><br>sudo chattr -i test.txt<br></code></pre></td></tr></table></figure>
+
+<h4 id="取消目录下的所有文件只读、不可删除"><a href="#取消目录下的所有文件只读、不可删除" class="headerlink" title="取消目录下的所有文件只读、不可删除"></a>取消目录下的所有文件只读、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># home目录</span><br>sudo chattr -R -i /home/<br></code></pre></td></tr></table></figure>
+
+<h4 id="取消文件的只能追加、不可删除"><a href="#取消文件的只能追加、不可删除" class="headerlink" title="取消文件的只能追加、不可删除"></a>取消文件的只能追加、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo chattr -a test.txt<br></code></pre></td></tr></table></figure>
+
+<h4 id="取消目录下的所有文件只能追加、不可删除"><a href="#取消目录下的所有文件只能追加、不可删除" class="headerlink" title="取消目录下的所有文件只能追加、不可删除"></a>取消目录下的所有文件只能追加、不可删除</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo chattr -R -a /home/<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="查看文件属性"><a href="#查看文件属性" class="headerlink" title="查看文件属性"></a>查看文件属性</h4><blockquote>
+<p>使用lsattr命令</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看test.txt文件的属性</span><br>lsattr test.txt<br><br><span class="hljs-comment"># 查看当前目录下所有文件的属性</span><br>lsattr ./<br><br><span class="hljs-comment"># 查看所有以wav后缀结尾的文件的属性</span><br>lsattr *.wav<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><blockquote>
+<p>chattr 并不适用于所有目录，chattr不能保护/, /dev, /var目录</p>
+</blockquote>
 
             </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/">Linux 常用命令详解</a>
+                    
+                  </div>
                 
                 
               </div>
@@ -261,12 +297,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2021/08/06/cpp_chapter5_20210809/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++ Primer Plus 课后习题 第五章</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/09/08/asr_lm-prune_20210908/">
-                        <span class="hidden-mobile">统计语言模型之模型剪枝算法</span>
+                      <a href="/2021/08/05/cpp_chapter4_20210808/">
+                        <span class="hidden-mobile">C++ Primer Plus 课后习题 第四章</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

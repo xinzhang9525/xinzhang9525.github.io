@@ -1,0 +1,586 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="for循环; 表达式和语句; 复合语句; 逗号运算符; while循环; 总结">
+  <meta name="author" content="Xin Zhang">
+  <meta name="keywords" content="">
+  
+  <title>C++ Primer Plus 课后习题 第五章 - Hexo-blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="C++ Primer Plus 课后习题 第五章">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-08-06 09:00" pubdate>
+        2021年8月6日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      35
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C++ Primer Plus 课后习题 第五章</h1>
+            
+            <div class="markdown-body">
+              <h2 id="第五章-复合类型"><a href="#第五章-复合类型" class="headerlink" title="第五章 复合类型"></a>第五章 复合类型</h2><h3 id="5-8-1"><a href="#5-8-1" class="headerlink" title="5.8.1"></a>5.8.1</h3><blockquote>
+<p>入口条件循环和出口条件循环之间的区别是什么？各种C+=循环分别属于其中的哪一种？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// a. actor是由30个char组成的数组</span><br><span class="hljs-keyword">char</span> actor[<span class="hljs-number">30</span>];<br>    <br><span class="hljs-comment">// b. betsie是由100个short组成的数组</span><br><span class="hljs-keyword">char</span> betsie[<span class="hljs-number">100</span>];<br><br><span class="hljs-comment">// c. chuck是由13个float组成的数组</span><br><span class="hljs-keyword">float</span> chuck[<span class="hljs-number">13</span>];<br><br><span class="hljs-comment">// d. dipsea是由64个long double组成的数组</span><br><span class="hljs-keyword">long</span> <span class="hljs-keyword">double</span> dipsea[<span class="hljs-number">64</span>]<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-2"><a href="#5-8-2" class="headerlink" title="5.8.2"></a>5.8.2</h3><blockquote>
+<p>如果下面的代码片段是有效程序的组成部分，它将打印什么内容？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">int</span> i;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++)<br>    cout &lt;&lt; i;<br>    cout &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-3"><a href="#5-8-3" class="headerlink" title="5.8.3"></a>5.8.3</h3><blockquote>
+<p>如果下面的代码片段是有效程序的组成部分，它将打印什么内容？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">int</span> j;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">11</span>; j+=<span class="hljs-number">3</span>)<br>    cout &lt;&lt; j;<br>cout &lt;&lt; endl &lt;&lt; j &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-4"><a href="#5-8-4" class="headerlink" title="5.8.4"></a>5.8.4</h3><blockquote>
+<p>如果下面的代码片段是有效程序的组成部分，它将打印什么内容？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">int</span> j = <span class="hljs-number">5</span>;<br><span class="hljs-keyword">while</span> ( ++j &lt; <span class="hljs-number">9</span>)<br>    cout &lt;&lt; j++ &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-5"><a href="#5-8-5" class="headerlink" title="5.8.5"></a>5.8.5</h3><blockquote>
+<p>如果下面的代码片段是有效程序的组成部分，它将打印什么内容？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">int</span> k = <span class="hljs-number">8</span>;<br><span class="hljs-keyword">do</span><br>    cout &lt;&lt; <span class="hljs-string">&quot; k = &quot;</span> &lt;&lt; k &lt;&lt; endl;<br><span class="hljs-keyword">while</span>(k++ &lt; <span class="hljs-number">5</span>);<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-6"><a href="#5-8-6" class="headerlink" title="5.8.6"></a>5.8.6</h3><blockquote>
+<p>编写一个打印1、2、4、8、16、32、64的for循环，每轮循环都将计数变量的值乘以2.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">char</span> a[] = <span class="hljs-string">&quot;cheeseburger&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-7"><a href="#5-8-7" class="headerlink" title="5.8.7"></a>5.8.7</h3><blockquote>
+<p>如何在循环体中包括多条语句？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br>string strs = <span class="hljs-string">&quot;Waldorf Salad&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-8"><a href="#5-8-8" class="headerlink" title="5.8.8"></a>5.8.8</h3><blockquote>
+<p>下面的语句是否有效？如果无效，原因是什么？如果有效，它将完成什么工作？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">int</span> x = (<span class="hljs-number">1</span>,<span class="hljs-number">024</span>);<br><br><span class="hljs-comment">//下面的语句又如何呢？</span><br><span class="hljs-keyword">int</span> y;<br>y = <span class="hljs-number">1</span>,<span class="hljs-number">024</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-8-9"><a href="#5-8-9" class="headerlink" title="5.8.9"></a>5.8.9</h3><blockquote>
+<p>在查看输入方面，cin &gt;&gt; ch同cin.get(ch)和ch=cin.get()有什么不同？</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++">fish golden_fish = &#123;<br>    <span class="hljs-string">&quot;golden&quot;</span>,<br>    <span class="hljs-number">13</span>,<br>    <span class="hljs-number">12.99</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-1"><a href="#5-9-1" class="headerlink" title="5.9.1"></a>5.9.1</h3><blockquote>
+<p>编写一个C++程序，如下述输出示例所示的那样请求并显示信息：</p>
+<p>What is your first name? Betty Sue</p>
+<p>What is your last name? Yewe</p>
+<p>What letter grade do you deserve? B</p>
+<p>What is your age? 22</p>
+<p>Name: Yewe, Betty Sue</p>
+<p>Grade: C</p>
+<p>Age: 22</p>
+<p>注意：该程序应该接受的名字包含多个单词。此外，程序将向下调整成绩，即向上调一个字母。假设用户请求A、B、或C，所以不必担心D和F之间的空档。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">peopleinfo</span>&#123;</span><br>    <span class="hljs-keyword">char</span> *name[<span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">char</span> grade;<br>    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> age;<br>&#125;;<br>    <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    peopleinfo people;<br>    cout &lt;&lt; <span class="hljs-string">&quot;What is your first name? &quot;</span>;<br>    <span class="hljs-keyword">char</span> name[<span class="hljs-number">20</span>];<br>    cin.<span class="hljs-built_in">getline</span>(name);<br>    cin.<span class="hljs-built_in">get</span>();<br>    people.name[<span class="hljs-number">0</span>] = name;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;What is your last name? &quot;</span>;<br>    cin.<span class="hljs-built_in">getline</span>(name);<br>    cin.<span class="hljs-built_in">get</span>();<br>    people.name[<span class="hljs-number">1</span>] = name;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;What letter grade do you deserve? &quot;</span>;<br>    cin &gt;&gt; people.grade;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;What is your age? &quot;</span>;<br>    cin &gt;&gt; people.age;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Name: &quot;</span> &lt;&lt; people.name[<span class="hljs-number">0</span>] &lt;&lt; <span class="hljs-string">&quot;, &quot;</span> &lt;&lt; people.name[<span class="hljs-number">1</span>] &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Grade: &quot;</span> &lt;&lt; ++people.grade &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Age: &quot;</span> &lt;&lt; people.age &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-2"><a href="#5-9-2" class="headerlink" title="5.9.2"></a>5.9.2</h3><blockquote>
+<p>修改程序清单4.4，使用C++ string类而不是char数组。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//清单4.4程序代码</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> ArSize = <span class="hljs-number">20</span>;<br>    <span class="hljs-keyword">char</span> name[ArSize];<br>    <span class="hljs-keyword">char</span> dessert[ArSize];<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your name: \n&quot;</span>;<br>    cin.<span class="hljs-built_in">getline</span>(name, ArSize);<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your favorite dessert: \n&quot;</span>;<br>    cin.<span class="hljs-built_in">getline</span>(dessert, ArSize);<br>    cout &lt;&lt; <span class="hljs-string">&quot;I have some delicious &quot;</span> &lt;&lt; dessert;<br>    cout &lt;&lt; <span class="hljs-string">&quot; for you, &quot;</span> &lt;&lt; name &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//string类改写版程序代码</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    string name, dessert;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your name: \n&quot;</span>;<br>    <span class="hljs-built_in">getline</span>(cin, name);<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your favorite dessert: \n&quot;</span>;<br>    <span class="hljs-built_in">getline</span>(cin, dessert);<br>    cout &lt;&lt; <span class="hljs-string">&quot;I have some delicious &quot;</span> &lt;&lt; dessert;<br>    cout &lt;&lt; <span class="hljs-string">&quot; for you, &quot;</span> &lt;&lt; name &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="5-9-3"><a href="#5-9-3" class="headerlink" title="5.9.3"></a>5.9.3</h3><blockquote>
+<p>编写一个程序，它要求用户首先输入其名，然后输入其姓；然后程序使用一个逗号和空格将姓和名组合起来，并存储和显示组合结果。请使用char数组和头文件cstring中的函数。下面是该程序运行时的情形：</p>
+<p>Enter your first name: Flip</p>
+<p>Enter your last name: Fleming</p>
+<p>Here’s the information in a single string: Fleming, Flip</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">char</span> name[<span class="hljs-number">2</span>][<span class="hljs-number">20</span>];<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your first name: &quot;</span>;<br>    cin.<span class="hljs-built_in">getline</span>(name[<span class="hljs-number">0</span>], <span class="hljs-number">20</span>);<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your last name: &quot;</span>;<br>    cin.<span class="hljs-built_in">getline</span>(name[<span class="hljs-number">1</span>], <span class="hljs-number">20</span>);<br>    cout &lt;&lt; <span class="hljs-string">&quot;Here&#x27;s the information in a single string: &quot;</span>;<br>    cout &lt;&lt; <span class="hljs-built_in">strcat</span>(<span class="hljs-built_in">strcat</span>(name[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;, &quot;</span>), name[<span class="hljs-number">1</span>]);<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-4"><a href="#5-9-4" class="headerlink" title="5.9.4"></a>5.9.4</h3><blockquote>
+<p>编写一个程序，它要求用户首先输入其名，再输入其姓；然后程序使用一个逗号和空格将姓和名组合起来，并存储和显示组合结果。请使用string对象和头文件string中的函数。下面是该程序运行时的情形：</p>
+<p>Enter your first name: Flip</p>
+<p>Enter your last name: Fleming</p>
+<p>Here’s the information in a single string: Fleming, Flip</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    string name[<span class="hljs-number">2</span>];<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your first name: &quot;</span>;<br>    <span class="hljs-built_in">getline</span>(cin, name[<span class="hljs-number">0</span>]);<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your last name: &quot;</span>;<br>    <span class="hljs-built_in">getline</span>(cin, name[<span class="hljs-number">1</span>]);<br>    cout &lt;&lt; <span class="hljs-string">&quot;Here&#x27;s the information in a single string: &quot;</span>;<br>    cout &lt;&lt; name[<span class="hljs-number">0</span>] + <span class="hljs-string">&quot;, &quot;</span> + name[<span class="hljs-number">1</span>] &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-5"><a href="#5-9-5" class="headerlink" title="5.9.5"></a>5.9.5</h3><blockquote>
+<p>结构CandyBar包含三个成员。第一个成员存储了糖块的品牌；第二个成员存储糖块的重量（可以有小数）；第三个成员存储了糖块的卡路里含量（整数）。请编写一个程序，声明这个结构，创建一个名为snack的CandyBar变量，并将其成员分别初始化为“Mocha Munch”、2.3和350.初始化应在声明snack时进行。最后，程序显示snack变量的内容。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">CandyBar</span>&#123;</span><br>    string brand;<br>    <span class="hljs-keyword">double</span> weight;<br>    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> calorie;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    CandyBar snack = &#123;<br>        <span class="hljs-string">&quot;Mocha Munch&quot;</span>,<br>        <span class="hljs-number">2.3</span>,<br>        <span class="hljs-number">350</span><br>    &#125;;<br>    <br>    cout &lt;&lt; snack.brand &lt;&lt; endl;<br>    cout &lt;&lt; snack.weight &lt;&lt; endl;<br>    cout &lt;&lt; snack.calorie &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-6"><a href="#5-9-6" class="headerlink" title="5.9.6"></a>5.9.6</h3><blockquote>
+<p>结构CandyBar包含3个成员，如编程练习5所示。请编写一个程序，创建一个包含3个元素的CandyBar数组，并将它们初始化为所选择的值，然后显示每个结构的内容。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">CandyBar</span>&#123;</span><br>    string brand;<br>    <span class="hljs-keyword">double</span> weight;<br>    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> calorie;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    CandyBar snack[<span class="hljs-number">3</span>] = &#123;<br>        &#123;<span class="hljs-string">&quot;Mocha Munch&quot;</span>, <span class="hljs-number">2.3</span>, <span class="hljs-number">350</span>&#125;,<br>        &#123;<span class="hljs-string">&quot;Mocha Munch&quot;</span>, <span class="hljs-number">2.4</span>, <span class="hljs-number">450</span>&#125;,<br>        &#123;<span class="hljs-string">&quot;Mocha Munch&quot;</span>, <span class="hljs-number">2.5</span>, <span class="hljs-number">550</span>&#125;<br>    &#125;;<br>    <br>    cout &lt;&lt; snack[<span class="hljs-number">0</span>].brand &lt;&lt; endl;<br>    cout &lt;&lt; snack[<span class="hljs-number">1</span>].weight &lt;&lt; endl;<br>    cout &lt;&lt; snack[<span class="hljs-number">3</span>].calorie &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-7"><a href="#5-9-7" class="headerlink" title="5.9.7"></a>5.9.7</h3><blockquote>
+<p>William Wingate从事披萨饼分析服务。对于每个披萨饼，他都需要记录下列信息：</p>
+<p>披萨饼公司的名称，可以有多个单词组成。</p>
+<p>披萨饼的直径。</p>
+<p>披萨饼的重量。</p>
+<p>请设计一个能够存储这些信息的结构，并编写一个使用这些结构变量的程序。程序将请求用户输入上述信息，然后显示这些信息。请你使用cin（或其他方法）和cout。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Pizza</span>&#123;</span><br>    string comp;<br>    <span class="hljs-keyword">double</span> diam;<br>    <span class="hljs-keyword">double</span> weight;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    Pizza bug_pizza;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the company name of Pizza: &quot;</span>;<br>    <span class="hljs-built_in">getline</span>(cin, bug_pizza.comp);<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the diameter of Pizza: &quot;</span>;<br>    cin &gt;&gt; bug_pizza.diam;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the weight of Pizza: &quot;</span>;<br>    cin &gt;&gt; bug_pizza.weight;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;company: &quot;</span> &lt;&lt; bug_pizza.comp &lt;&lt; endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-8"><a href="#5-9-8" class="headerlink" title="5.9.8"></a>5.9.8</h3><blockquote>
+<p>完成编程练习7，但使用new来动态分配数组，而不是声明一个结构变量。另外，让程序在请求输入披萨饼公司名称之前输入披萨饼的直径。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Pizza</span>&#123;</span><br>    string comp;<br>    <span class="hljs-keyword">double</span> diam;<br>    <span class="hljs-keyword">double</span> weight;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    Pizza *bug_pizza = <span class="hljs-keyword">new</span> Pizza;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the diameter of Pizza: &quot;</span>;<br>    cin &gt;&gt; bug_pizza-&gt;diam;<br>    cin.<span class="hljs-built_in">get</span>();<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the company name of Pizza: &quot;</span>;<br>    <span class="hljs-built_in">getline</span>(cin, bug_pizza-&gt;comp);<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the weight of Pizza: &quot;</span>;<br>    cin &gt;&gt; bug_pizza-&gt;weight;<br>    <br>    cout &lt;&lt; <span class="hljs-string">&quot;company: &quot;</span> &lt;&lt; bug_pizza-&gt;comp &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">delete</span> bug_pizza;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-9"><a href="#5-9-9" class="headerlink" title="5.9.9"></a>5.9.9</h3><blockquote>
+<p>完成编程练习6，但使用new来动态分配数组，而不是声明一个包含3个元素的CandyBar数组。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">CandyBar</span>&#123;</span><br>    string brand;<br>    <span class="hljs-keyword">double</span> weight;<br>    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> calorie;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    CandyBar *snack = <span class="hljs-keyword">new</span> CandyBar[<span class="hljs-number">3</span>];<br>    *snack = &#123;<span class="hljs-string">&quot;Mocha Munch&quot;</span>, <span class="hljs-number">2.3</span>, <span class="hljs-number">350</span>&#125;;<br>    *(snack+<span class="hljs-number">1</span>) = &#123;<span class="hljs-string">&quot;Mocha Munch&quot;</span>, <span class="hljs-number">2.4</span>, <span class="hljs-number">450</span>&#125;;<br>    *(snack+<span class="hljs-number">2</span>) = &#123;<span class="hljs-string">&quot;Mocha Munch&quot;</span>, <span class="hljs-number">2.5</span>, <span class="hljs-number">550</span>&#125;;<br>    <br>    cout &lt;&lt; snack[<span class="hljs-number">0</span>].brand &lt;&lt; endl;<br>    cout &lt;&lt; snack[<span class="hljs-number">1</span>].weight &lt;&lt; endl;<br>    cout &lt;&lt; snack[<span class="hljs-number">3</span>].calorie &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-9-10"><a href="#5-9-10" class="headerlink" title="5.9.10"></a>5.9.10</h3><blockquote>
+<p>编写一个程序，让用户输入三次40码跑的成绩（如果您愿意，也可以让用户输入40米跑的成绩），并显示次数和平均成绩。请使用一个array数组对象来存储数据（如果编译器不支持array类，请使用数组）。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;array&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> count = <span class="hljs-number">0</span>;<br>    array&lt;<span class="hljs-keyword">double</span>, 3&gt; match_grade;<br>    cout &lt;&lt; <span class="hljs-string">&quot;input: &quot;</span>;<br>    cin &gt;&gt; match_grade[<span class="hljs-number">0</span>];<br>    count++;<br>    cin &gt;&gt; match_grade[<span class="hljs-number">1</span>];<br>    count++;<br>    cin &gt;&gt; match_grade[<span class="hljs-number">2</span>];<br>    count++;<br>   <br>    cout &lt;&lt; <span class="hljs-string">&quot;Total times: &quot;</span> &lt;&lt; count &lt;&lt; endl;<br>    cout &lt;&lt; (match_grade[<span class="hljs-number">0</span>] + match_grade[<span class="hljs-number">1</span>] + match_grade[<span class="hljs-number">2</span>]) / count &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98%E7%AD%94%E6%A1%88/">课后习题答案</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98%E7%AD%94%E6%A1%88/C-Primer-Plus-6th/">C++ Primer Plus 6th</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/09/05/asr_lm-smoothing_20210907/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">统计语言模型之平滑方法详解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/08/06/linux_command_chattr/">
+                        <span class="hidden-mobile">Linux chattr 命令详解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

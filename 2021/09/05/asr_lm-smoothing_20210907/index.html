@@ -1,0 +1,1095 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="拉普拉斯平滑; Katz平滑; KN平滑">
+  <meta name="author" content="Xin Zhang">
+  <meta name="keywords" content="">
+  
+  <title>统计语言模型之平滑方法详解 - Hexo-blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="统计语言模型之平滑方法详解">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-09-05 09:00" pubdate>
+        2021年9月5日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      82
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">统计语言模型之平滑方法详解</h1>
+            
+            <div class="markdown-body">
+              <h3 id="为什么要引入平滑技术"><a href="#为什么要引入平滑技术" class="headerlink" title="为什么要引入平滑技术"></a>为什么要引入平滑技术</h3><p>对于大小为V的词典，n-gram模型的参数高达$V^n$，对于大量的低频词来说，无论训练语料如何扩大，其出现的频次依然很低或根本不出现，无法获得其可靠的概率估计。但训练语料中不出现的词并不意味着这些词在实际生活中也不会出现，因此需要给这些没有包括到的词也赋予一定的概率。平滑技术就是用来解决这类数据稀疏问题的，其基本思想是<strong>劫富济贫</strong>，对最大似然估计算法估计的概率进行一定调整，提高零概率，降低高概率，使得模型中的概率分布趋于合理和均匀。</p>
+<p>平滑技术主要有三种，现有的平滑技术可以看作是这其中一种或多种的组合：</p>
+<ul>
+<li>折扣法（Discounting）：从已有的观察概率中调配一点给未观察到的概率</li>
+<li>插值法（Interpolation）：将高阶模型和低阶模型进行混合</li>
+<li>回退法（Back-off）：利用低阶模型来近似估计未观察到的高阶模型</li>
+</ul>
+<p>再来看一下文中相关符号理解：</p>
+<ul>
+<li><p>$C(.)$ ​​​​表示相应N-gram出现的次数</p>
+</li>
+<li><p>V 表示词典的总词汇数</p>
+</li>
+<li><p>N 表示训练语料库中的总词数</p>
+</li>
+<li><p>$w^t_{t-n+1}$​​​表示字符序列${w_{t-n+1}, w_{t-n+2}, …, w_t}$​</p>
+</li>
+</ul>
+<h3 id="Laplace-smoothing-amp-Add-k-smoothing"><a href="#Laplace-smoothing-amp-Add-k-smoothing" class="headerlink" title="Laplace smoothing &amp; Add-k smoothing"></a>Laplace smoothing &amp; Add-k smoothing</h3><p><strong>Laplace平滑</strong>，又称为加1平滑(Add-1 Smoothing)，<strong>该方法会将所有的N-gram计数加上1</strong>，以避免出现零概率问题。之前计数为0的n-gram将变为1，计数为1的n-gram将变为2，以此类推。</p>
+<p>首先来回顾一下没有采用平滑方法时的<strong>unigram概率</strong>$P_{MLE}(w_t)$​​​​​计算方法，其中N​​​​表示训练语料库中的总词数：<br>$$<br>P_{MLE}(w_t) =  \frac{C(w_t)}{N}<br>$$<br>引入Laplace smoothing后，<strong>新的unigram概率</strong>$P_{Laplace}(w_t)$​​​​计算公式变为：<br>$$<br>P_{Laplace}(w_t) = \frac{C(w_t)+1}{N+V}<br>$$<br>再来回顾一下未采用平滑方法时的<strong>bigram概率</strong>$P_{MLE}(w_n|w_{n-1})$​​​计数公式如下：<br>$$<br>P_{MLE}(w_n|w_{n-1}) =  \frac{C(w_{n-1}w_n)}{C(w_{n-1})} = \frac{C(w_{n-1}w_n)}{\sum_w(C(w_{n-1}w))}<br>$$<br>引入Laplace smoothing后，<strong>新的bigram概率</strong>$P_{Laplace}(w_n|w_{n-1})$​​计算公式变为：<br>$$<br>P_{Laplace}(w_n|w_{n-1}) =  \frac{C(w_{n-1}w_n)+1}{\sum_w(C(w_{n-1}w)+1)} = \frac{C(w_{n-1}w_n)+1}{C(w_{n-1}) + V}<br>$$</p>
+<p><strong>Laplace平滑存在的问题</strong>：</p>
+<p>观察上面公式可以发现，引入Laplace平滑后计算概率不会存在零概率问题。但<strong>采用Laplace平滑给概率值带来的改变过大</strong>，即将过多的观察概率分给了那些零概率的n-gram。</p>
+<p>一种改进方法是**加K平滑(Add-k smoothing)**，将计数值1改为k，其中k的取值范围为($0&lt;k\leq 1$)，以此来缓解Laplace平滑存在的问题，通常根据验证语料集来确定k的值。相应的unigram和bigram的评估公式变为：<br>$$<br>P_{Add-k}(w_t) = \frac{C(w_t)+k}{N+kV}. \quad 0 &lt; k \leq 1<br>$$</p>
+<p>$$<br>P_{Add-k}(w_n|w_{n-1}) =  \frac{C(w_{n-1}w_n)+k}{\sum_w(C(w_{n-1}w)+k)} = \frac{C(w_{n-1}w_n)+k}{C(w_{n-k}) + kV}<br>$$</p>
+<p><strong>总结</strong></p>
+<p>Laplace平滑和Add-k平滑方法在实际应用中效果较差，因此一般将其作为基准版本(baseline)。或由此引入平滑算法中的一些基本概念。如：</p>
+<ul>
+<li><p><strong>修正后的词频数</strong>: 考虑到上述平滑算法需要同时改变概率计算式的分母和分子，对照分析应用该平滑方法前后的词频数时不太方便，因此引入了修正后的词频数概念，目的是保持分母相同的情况下，方便观察词频数的变化情况。引入一个<strong>归一化参数</strong>$\frac{N}{N+V}$​​​，经Laplace平滑修正后的unigram词频数为$c^*(w_t) = (c(w_t) + 1)\frac{N}{N+V}$​​​​. </p>
+</li>
+<li><p><strong>折扣率</strong>: 定义为修正后的词频数与原来的词频数的比率，即$d=\frac{C^*(w_t)}{C(w_t)}$​​.</p>
+</li>
+</ul>
+<p>下面我们来看一下Laplace平滑给概率值带来的影响，例子参考于《Speech and language processing》:</p>
+<p>首先给出的是训练语料中的一小部分bigram计数，其中大部分bigram计数都为0：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>i</th>
+<th>want</th>
+<th>to</th>
+<th>eat</th>
+<th>chinese</th>
+<th>food</th>
+<th>lunch</th>
+<th>spend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>5</td>
+<td>827</td>
+<td>0</td>
+<td>9</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td>want</td>
+<td>2</td>
+<td>0</td>
+<td><strong>608</strong></td>
+<td>1</td>
+<td>6</td>
+<td>6</td>
+<td>5</td>
+<td>1</td>
+</tr>
+<tr>
+<td>to</td>
+<td>2</td>
+<td>0</td>
+<td>4</td>
+<td>686</td>
+<td>2</td>
+<td>0</td>
+<td>6</td>
+<td>211</td>
+</tr>
+<tr>
+<td>eat</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>16</td>
+<td>2</td>
+<td>42</td>
+<td>0</td>
+</tr>
+<tr>
+<td>chinese</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>82</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>food</td>
+<td>15</td>
+<td>0</td>
+<td>15</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>lunch</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>spend</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>再给出这些单词的unigram计数：</p>
+<table>
+<thead>
+<tr>
+<th>I</th>
+<th>want</th>
+<th>to</th>
+<th>eat</th>
+<th>chinese</th>
+<th>food</th>
+<th>lunch</th>
+<th>spend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2533</td>
+<td><strong>927</strong></td>
+<td>2417</td>
+<td>746</td>
+<td>158</td>
+<td>1093</td>
+<td>341</td>
+<td>278</td>
+</tr>
+</tbody></table>
+<p>根据未加入平滑前的概率计算公式，结合unigram和bigram的计数可以计算出{want to} bigram对应的概率：<br>$$<br>p(to|want) = \frac{p(want,,to)}{p(want)} = \frac{C(want,,to)}{C(want)} = \frac{608}{927} \approx 0.66<br>$$<br>最后得出所有bigram的概率如表所示：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>i</th>
+<th>want</th>
+<th>to</th>
+<th>eat</th>
+<th>chinese</th>
+<th>food</th>
+<th>lunch</th>
+<th>spend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>0.002</td>
+<td>0.33</td>
+<td>0</td>
+<td>0.0036</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.00079</td>
+</tr>
+<tr>
+<td>want</td>
+<td>0.0022</td>
+<td>0</td>
+<td>0.66</td>
+<td>0.0011</td>
+<td>0.0065</td>
+<td>0.0065</td>
+<td>0.0054</td>
+<td>0.0011</td>
+</tr>
+<tr>
+<td>to</td>
+<td>0.00083</td>
+<td>0</td>
+<td>0.0017</td>
+<td>0.28</td>
+<td>0.00083</td>
+<td>0</td>
+<td>0.0025</td>
+<td>0.087</td>
+</tr>
+<tr>
+<td>eat</td>
+<td>0</td>
+<td>0</td>
+<td>0.0027</td>
+<td>0</td>
+<td>0.021</td>
+<td>0.0027</td>
+<td>0.056</td>
+<td>0</td>
+</tr>
+<tr>
+<td>chinese</td>
+<td>0.0063</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.52</td>
+<td>0.0063</td>
+<td>0</td>
+</tr>
+<tr>
+<td>food</td>
+<td>0.014</td>
+<td>0</td>
+<td>0.014</td>
+<td>0</td>
+<td>0.00092</td>
+<td>0.0037</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>lunch</td>
+<td>0.0059</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.0029</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>spend</td>
+<td>0.0036</td>
+<td>0</td>
+<td>0.0036</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>有了这张表我们就可以去计算句子”i want chinese food“的概率了，假设我们的语言模型是基于bigram的：<br>$$<br>p(i,,want,,chinese,,food) = p(i|<s>)p(want|i)p(chinese|want)p(food|chinese)p(</s>|food)<br>$$<br>其中&lt; s &gt;和&lt; /s &gt;分别用来建模句子的开头和句子结尾。</p>
+<ul>
+<li><p>由于预测第一个词时没有历史词，而unigram中的$p(w)$​​​并不能代表词$w$​​​​出现在头部的概率。为了统一记号，我们引入了一个特殊的句子开始标签&lt; s &gt;，用$p(w|&lt; s &gt;)$​​来建模句子首字母是$w$​​​的概率。</p>
+</li>
+<li><p>语言模型是一个生成模型，但现在的问题是怎么建模句子的结束？因此就引入了&lt; /s &gt;标签来建模句子的结束，当生成了&lt; /s &gt;后则表示我们当前生成过程结束。</p>
+</li>
+</ul>
+<p>$$<br>p(i want to chinese food) = p(i|<s>)<em>0.33 * 0.0065</em>0.52*p(</s>|food)<br>$$</p>
+<p>现在让我们来引入Laplace平滑并更新bigram的计数表：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>i</th>
+<th>want</th>
+<th>to</th>
+<th>eat</th>
+<th>chinese</th>
+<th>food</th>
+<th>lunch</th>
+<th>spend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>6</td>
+<td>828</td>
+<td>1</td>
+<td>10</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>want</td>
+<td>3</td>
+<td>1</td>
+<td>609</td>
+<td>2</td>
+<td>7</td>
+<td>7</td>
+<td>6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>to</td>
+<td>3</td>
+<td>1</td>
+<td>5</td>
+<td>687</td>
+<td>3</td>
+<td>1</td>
+<td>7</td>
+<td>212</td>
+</tr>
+<tr>
+<td>eat</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+<td>17</td>
+<td>3</td>
+<td>43</td>
+<td>1</td>
+</tr>
+<tr>
+<td>chinese</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>83</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>food</td>
+<td>16</td>
+<td>1</td>
+<td>16</td>
+<td>1</td>
+<td>2</td>
+<td>5</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>lunch</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>spend</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>根据引入Laplace平滑后的概率计算公式得到新的概率表：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>i</th>
+<th>want</th>
+<th>to</th>
+<th>eat</th>
+<th>chinese</th>
+<th>food</th>
+<th>lunch</th>
+<th>spend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>0.0015</td>
+<td>0.33</td>
+<td>0.00025</td>
+<td>0.0025</td>
+<td>0.00025</td>
+<td>0.00025</td>
+<td>0.00025</td>
+<td>0.00075</td>
+</tr>
+<tr>
+<td>want</td>
+<td>0.0013</td>
+<td>0.00042</td>
+<td>0.26</td>
+<td>0.00084</td>
+<td>0.0029</td>
+<td>0.0029</td>
+<td>0.0025</td>
+<td>0.00084</td>
+</tr>
+<tr>
+<td>to</td>
+<td>0.00078</td>
+<td>0.00026</td>
+<td>0.0013</td>
+<td>0.18</td>
+<td>0.00078</td>
+<td>0.00026</td>
+<td>0.0018</td>
+<td>0.055</td>
+</tr>
+<tr>
+<td>eat</td>
+<td>0.00046</td>
+<td>0.00046</td>
+<td>0.0014</td>
+<td>0.00046</td>
+<td>0.0078</td>
+<td>0.0014</td>
+<td>0.02</td>
+<td>0.00046</td>
+</tr>
+<tr>
+<td>chinese</td>
+<td>0.0012</td>
+<td>0.00062</td>
+<td>0.00062</td>
+<td>0.00062</td>
+<td>0.00062</td>
+<td>0.052</td>
+<td>0.0012</td>
+<td>0.00062</td>
+</tr>
+<tr>
+<td>food</td>
+<td>0.0063</td>
+<td>0.00039</td>
+<td>0.0063</td>
+<td>0.00039</td>
+<td>0.00079</td>
+<td>0.002</td>
+<td>0.00039</td>
+<td>0.00039</td>
+</tr>
+<tr>
+<td>lunch</td>
+<td>0.0017</td>
+<td>0.00056</td>
+<td>0.00056</td>
+<td>0.00056</td>
+<td>0.00056</td>
+<td>0.0011</td>
+<td>0.00056</td>
+<td>0.00056</td>
+</tr>
+<tr>
+<td>spend</td>
+<td>0.0012</td>
+<td>0.00058</td>
+<td>0.0012</td>
+<td>0.00058</td>
+<td>0.00058</td>
+<td>0.00058</td>
+<td>0.00058</td>
+<td>0.00058</td>
+</tr>
+</tbody></table>
+<p>再根据上面介绍的修正后的词频数计算公式得出修正后的词频表如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>i</th>
+<th>want</th>
+<th>to</th>
+<th>eat</th>
+<th>chinese</th>
+<th>food</th>
+<th>lunch</th>
+<th>spend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>3.8</td>
+<td>527</td>
+<td>0.64</td>
+<td>6.4</td>
+<td>0.64</td>
+<td>0.64</td>
+<td>0.64</td>
+<td>1.9</td>
+</tr>
+<tr>
+<td>want</td>
+<td>1.2</td>
+<td>0.39</td>
+<td>238</td>
+<td>0.78</td>
+<td>2.7</td>
+<td>2.7</td>
+<td>2.3</td>
+<td>0.78</td>
+</tr>
+<tr>
+<td>to</td>
+<td>1.9</td>
+<td>0.63</td>
+<td>3.1</td>
+<td>430</td>
+<td>1.9</td>
+<td>0.63</td>
+<td>4.4</td>
+<td>133</td>
+</tr>
+<tr>
+<td>eat</td>
+<td>0.34</td>
+<td>0.34</td>
+<td>1</td>
+<td>0.34</td>
+<td>5.8</td>
+<td>1</td>
+<td>15</td>
+<td>0.34</td>
+</tr>
+<tr>
+<td>chinese</td>
+<td>2</td>
+<td>0.098</td>
+<td>0.098</td>
+<td>0.098</td>
+<td>0.098</td>
+<td>8.2</td>
+<td>0.2</td>
+<td>0.098</td>
+</tr>
+<tr>
+<td>food</td>
+<td>6.9</td>
+<td>0.43</td>
+<td>6.9</td>
+<td>0.43</td>
+<td>0.86</td>
+<td>2.2</td>
+<td>0.43</td>
+<td>0.43</td>
+</tr>
+<tr>
+<td>lunch</td>
+<td>0.57</td>
+<td>0.19</td>
+<td>0.19</td>
+<td>0.19</td>
+<td>0.19</td>
+<td>0.38</td>
+<td>0.19</td>
+<td>0.19</td>
+</tr>
+<tr>
+<td>spend</td>
+<td>0.32</td>
+<td>0.16</td>
+<td>0.32</td>
+<td>0.16</td>
+<td>0.16</td>
+<td>0.16</td>
+<td>0.16</td>
+<td>0.16</td>
+</tr>
+</tbody></table>
+<p>可以看到(want to)的计数从608-&gt;238, (chinese food)的计数从82-&gt;8.2。可以看出加一平滑对概率值的改动非常大。</p>
+<h3 id="Good-Turing-smoothing"><a href="#Good-Turing-smoothing" class="headerlink" title="Good-Turing smoothing"></a>Good-Turing smoothing</h3><p>Good-Turing平滑法是一种折扣法，主要思想将非零N元语法的概率均匀分给一些低概率语法，以修改最大似然估计与真实概率之间的偏离。是使用的比较多的一种平滑算法。</p>
+<p>首先引入符号标记：</p>
+<ul>
+<li>$N$​代表总词数</li>
+<li>$r,$​​​代表n-gram出现的次数</li>
+<li>$N_r$​​代表正好出现r次的n-gram总数</li>
+</ul>
+<p>将n-gram按出现的次数$r$​​作为类别，将整个语料库中所有的n-gram按次数类别进行分类。则$N=\sum_rrN_r$​​。而Good-Turing的做法是：对于任何一个出现r次的词我们都对它进行打折，计算出$r^*$​：<br>$$<br>r^* = \frac{(r+1)<em>N_{r+1}}{N_r}​<br>$$<br>打折后 $\sum_r r^</em>N_r = \sum_r (r+1)N_{r+1} = \sum_r (r)N_{r} = N$​,对于发生频次最大的n-gram，记其频次为M，有$(M+1)N_{M+1} = 0$​​.​​</p>
+<p>根据出现一次的事件的概率来估计未出现事件概率的思想源于：在一个较大的语料库中如十亿级别，如果某个词只出现了一次，那么它很有可能只是偶然出现，存在估计过高的问题，它的真实概率应远低于十亿分之一。这一假设对于出现二次或三次的词同样适用。但对于统计频次较高的词，则可以认为其统计次数是可靠的，可以不进行折扣。</p>
+<p><strong>让我们通过一些例子来了解Good-turing平滑的思想</strong>：</p>
+<p>首先针对unigram，假设现在我们现在有一个训练语料库，总词数N=1000词。训练语料库中出现1次的词有300个，出现次数2次的词有200个，出现3次的词有100个，出现0次的词剩余100个。</p>
+<p>引入平滑前，出现0次的unigram概率为$p(w) = \frac{r_w}{N} = \frac{0}{N} = 0$​​​，而引入Good-turing平滑后，出现0次的unigram的概率为$p(w) = \frac{r^*_w}{N}$，其中$r^*_w = \frac{(0+1)N_1}{N_0} = \frac{300}{100}$​，则$p(w) = \frac{3}{1000}$​.</p>
+<p>同理，对于n-gram，我们首先统计语料库中n-gram总数，然后按次数对n-gram进行分类，再重新计数为0的n-gram的平滑次数以获得最终的概率。</p>
+<p><strong>Good-Turing实际使用中存在如下几个问题</strong>：</p>
+<ul>
+<li>Good-Turing算法对发生频次最高的词，修正的$r^* = 0$​，这显然是不合理的。</li>
+<li>Good-Turing算法不能直接处理$N_r=0$​​的情况，比如若$N_6=0$​​，则折扣计算出的$N_5 = \frac{(r+1)N_6}{N_5} = 0$​​​​​.​改进措施有设置参数k，仅对词频数小于k的词的概率进行折扣。</li>
+<li>Good-Turing不能实现高阶模型和低阶模型的结合，这一点可以通过公式看出来，公式里面的参数是按相邻级传递的。而高阶模型和低阶模型结合的平滑效果较好，因此Good-Turing平滑一般不单独使用，而是作为其他平滑算法的一个配套算法。</li>
+</ul>
+<h3 id="Katz-smoothing"><a href="#Katz-smoothing" class="headerlink" title="Katz smoothing"></a>Katz smoothing</h3><p><strong>Katz平滑</strong>通过加入高阶模型和低阶模型的结合，基于Good-Turing平滑做了<strong>两个改进</strong>：</p>
+<ul>
+<li>仅对频次较低的n-gram进行折扣。</li>
+<li>加入了回退法。对频次较高的n-gram采用原始的最大似然估计，对频次较低的且非零的n-gram采用Good-Turing算法进行打折，对零频次的n-gram则回退到n-1-gram。其中折扣省下来的概率值将按照低一阶模型的概率分布分配给零概率的词。</li>
+</ul>
+<p><strong>Katz平滑的计算公式为</strong>：<br>$$<br>P_{Katz}(w_t|w^{t-1}<em>{t-n+1})=\left{<br>\begin{aligned}<br>&amp; \frac{C(w^t</em>{t-n+1})}{C(w^{t-1}<em>{t-n+1})},\qquad \qquad if,C(w^t</em>{t-n+1})&gt;k\<br>&amp; d_r\frac{C(w^t_{t-n+1})}{C(w^{t-1}<em>{t-n+1})}, \qquad  \qquad if, 0&lt;C(w^t_{t-n+1})\leq k \<br>&amp; backoff(w^{t-1}_{t-n+1})P_{Katz}(w_t|w^{t-1}_{t-n+2}),\qquad otherwise<br>\end{aligned}<br>\right.<br>$$<br>一般认为大的计数值认为是可靠的，不需要进行折扣，因此Katz引入了一个计数值$k$，当$r&gt;k$情况下使用最大似然估计。当$0&lt;r \leq k$时，对最大似然估计值进行一定的折扣。当$r=0$时，概率计算回退到(n-1)-gram模型，将折扣下来的概率量分配给计数为0的n-gram。其中，记$r=C(w^t</em>{t-n+1})$，$d_r$为根据Good-Turing算法计算出来的折扣系数，近似地等于$\frac{r^*}{r}$。$backoff(w^{t-1}_{t-n+1})$是与上下文相关的回退系数，也是归一化系数，其作用是保证修正后的概率和保持为1。</p>
+<p>下面我们来看看如何计算折扣率和回退系数：</p>
+<p>**计算折扣率$d_r$:**​</p>
+<p>$d_r$的选择遵循如下约束条件：</p>
+<ul>
+<li><p>最终折扣量与Good-Turing估计预测的减值量成比例。即对于某些常数$μ$​, $r\in{1,2,…,k}$​​，有公式如下，$\frac{r^*}{r}$表示Good-Turing的折扣率：<br>$$<br>1-d_r = μ(1-\frac{r^*}{r})<br>$$</p>
+</li>
+<li><p>全局n元语法中被折扣的计数总量等于根据Good-Turing估计应该分配给次数为零的n元语法的总数。有公式：</p>
+</li>
+</ul>
+<p>$$<br>\sum_{r=1}^{k}n_r(1-d_r)r = n_1<br>$$</p>
+<p>这些公式的唯一解为：<br>$$<br>d_r = \frac{\frac{r^*}{r} - \frac{(k+1)n_{k+1}}{n_1}}{1-\frac{(k+1)n_{k+1}}{n_1}}<br>$$<br>其中当$r&gt;k$时，$d_r=1$。</p>
+<p><strong>计算回退系数</strong>$backoff(w^{t-1}<em>{t-n+1}):$​​​​​<br>$$<br>backoff(w^{t-1}</em>{t-n+1}) = \frac{<br>1- \sum_{w_i: C(w^t_{t-n+1})&gt;0}  P_{Katz} (w_t|w^{t-1}<em>{t-n+1})<br>}<br>{ \sum</em>{w_i:C(w^t_{t-n+1})=0} P_{Katz} (w_t|w^{t-1}<em>{t-n+2}) }<br>$$<br>其中分子中的$\sum</em>{w_i:C(w^t_{t-n+1})&gt;0}{P_{Katz}(w_t|w^{t-1}_{t-n+1})}$​表示所有的非零n-gram概率总和，分母表示所有计数为0的n-gram回退模型的概率总和。</p>
+<h3 id="Jelinek-Mercer-smoothing"><a href="#Jelinek-Mercer-smoothing" class="headerlink" title="Jelinek-Mercer smoothing"></a>Jelinek-Mercer smoothing</h3><p>假设要在一批训练语料上构建bigram语言模型，其中，有两对词的同现次数为0：<br>$$<br>C(send,,the) = 0,  \quad C(send,,thou) = 0<br>$$<br>那么按照​加法平滑或Good-Turing估计方法可以得到：<br>$$<br>P(the|send) = P(thou|send)<br>$$<br>但是直觉上我们认为应该有：<br>$$<br>P(the|send) &gt; P(thou|send)<br>$$<br>因为冠词$the$要比单词$thou$出现的频率高得多。为了利用这种情况，一种处理方法是在bigram模型中加入unigram模型，那么可以按照下面的方法将bigram和unigram模型进行线性插值：<br>$$<br>P_{interp}(w_i|w_{i-1}) =  \lambda P_{ML}(w_i|w_{i-1}) + (1-\lambda) P_{ML}(w_i)<br>$$<br>当没有足够的语料估计高阶模型的概率时，低阶模型往往可以提供有用的信息。Jelinek和Mercer提出了通用的插值模型，即第n阶平滑模型可以递归的定义为n阶最大似然估计模型和(n-1)阶平滑模型之间的线性插值：<br>$$<br>P_{interp}(w_i|w_{i-1}) = \lambda_{w^{i-1}<em>{i-n+1}} P</em>{ML}(w_i|w^{i-1}<em>{i-n+1}) + (1-\lambda</em>{w^{i-1}<em>{i-n+1}}) P</em>{interp}(w_i|w^{i-1}<em>{i-n+2})<br>$$<br>为了结束递归，可以用最大似然分布作为平滑的1阶模型，或者用均匀分布作为平滑的0阶模型：<br>$$<br>P</em>{unif}(w_i) = \frac{1}{|V|}<br>$$</p>
+<p><strong>插值系数计算</strong></p>
+<p>给定一个固定的$P_{ML}$​，可以使用Baum-Welch算法有效地搜索出$\lambda_{w^{i-1}<em>{i-n+1}}$​，使某些数据的概率最大。为了得到有意义的结果，估计$\lambda</em>{w^{i-1}<em>{i-n+1}}$​的语料应该与计算$P</em>{ML}$​的语料不同。在留存插值方法（heldout interpolation）中，保留一部分训练语料来达到这个目的，这部分留存语料不参与计算$P_{ML}$​。而Jelinek和Mercer提出了一种叫做删除插<br>值法（deleted interpolation）或删除估计法（deleted estimation）的处理技术，训练语料的不同部分在训练$P_{ML}$​或时作变换，从而使结果平均。</p>
+<p>插值系数$\lambda_{w^{i-1}<em>{i-n+1}}$是与上下文相关的，对于出现过多次的上下文$w^{i-1}</em>{i-n+1}$，比如一千多次，可认为高阶模型的数据是可靠的，因此$\lambda_{w^{i-1}<em>{i-n+1}}$应该大一些。相反，若上下文$w^{i-1}</em>{i-n+1}$出现的次数较少，则认为高阶模型的数据不是很可靠，因此$\lambda_{w^{i-1}<em>{i-n+1}}$应该小一些。由于不同的上下文$w^{i-1}</em>{i-n+1}$对应的插值系数是不一样的，而精确的训练这么多独立的参数是不太现实的。因此Jelinek和Mercer建议将$\lambda_{w^{i-1}<em>{i-n+1}}$按$C(w^{i-1}</em>{i-n+1})$划分成几部分或几段，令同一部分里的上下文对应的$\lambda_{w^{i-1}<em>{i-n+1}}$相等，以此来减少参数量。理想情况下，根据先验知识将应该具有相似值的$\lambda</em>{w^{i-1}_{i-n+1}}$归并到一起。</p>
+<h3 id="Witten-Bell-smoothing"><a href="#Witten-Bell-smoothing" class="headerlink" title="Witten-Bell smoothing"></a>Witten-Bell smoothing</h3><p>Witten-Bell平滑可认为是Jelinek-Mercer平滑的一个实例，计算公式同Jelinek-Mercer:<br>$$<br>P_{interp}(w_i|w_{i-1}) = \lambda_{w^{i-1}<em>{i-n+1}} P</em>{ML}(w_i|w^{i-1}<em>{i-n+1}) + (1-\lambda</em>{w^{i-1}<em>{i-n+1}}) P</em>{interp}(w_i|w^{i-1}<em>{i-n+2})<br>$$<br>不同的地方在于计算插值系数的方式：<br>$$<br>1-\lambda</em>{w^{i-1}<em>{i-n+1}} = \frac{N</em>{1+}(w^{i-1}<em>{i-n+1}.)}{N</em>{1+}(w^{i-1}<em>{i-n+1}.)+C(w^{i-1}</em>{i-n+1})}<br>$$<br>其中$N_{1+}$表示跟在词串 $w^{i-1}<em>{i-n+1}$​后面的不同词的个数，其规范定义为：<br>$$<br>N</em>{1+}(w^{i-1}<em>{i-n+1}.) = |{v: C(w^{i-1}</em>{i-n+1}v)&gt;0}|<br>$$</p>
+<p><strong>对插值系数的理解：</strong></p>
+<p>使用高阶模型的概率为$\lambda_{w^{i-1}<em>{i-n+1}}$​，使用低阶模型的概率为$1-\lambda</em>{w^{i-1}<em>{i-n+1}}$​。把$1-\lambda</em>{w^{i-1}<em>{i-n+1}}$​理解为在训练语料库中没有观察到单词出现在$w^{i-1}</em>{i-n+1}$​​​之后的概率，即出现新词的概率。这意味着，对于历史词串$w^{i-1}_{i-n+1}$​，若其后面接新词的概率越大，则由其形成的n-gram很有可能在语料库中没有出现过，因此插值模型应当赋予低阶模型更高的权重。</p>
+<p>Witten-Bell的思想和Good-Turing估计有异曲同工之妙，我们可以来重新认识一下Good-Turing的公式定义。Good-Turing平滑中，将出现过一次($r_1$)的n-gram的概率$\frac{r_1}{N}$分配给所有未出现过的n-gram，概率$\frac{r_1}{N}$可另表示为词串$w^{i-1}<em>{i-n+1}$后面的新词数量仅为1的情形。则改写$N</em>{1+}$为$N_1$：<br>$$<br>N_{1}(w^{i-1}<em>{i-n+1}.) = |{v: C(w^{i-1}</em>{i-n+1}v)=1}|<br>$$</p>
+<h3 id="Absolute-smoothing"><a href="#Absolute-smoothing" class="headerlink" title="Absolute smoothing"></a>Absolute smoothing</h3><p>绝对折扣法也采用了高低阶结合的思想来处理平滑，但不同于Jelinek-Mercer方法中高阶模型乘以折扣因子的做法，而是对高阶模型的计数减去一个统一的固定值$0\leq D \leq1$​：<br>$$<br>P_{Abs}(w_t|w^{t-1}<em>{t-n+1}) = \frac{max(C(w^t</em>{t-n+1})-D, 0)}{C(w^{t-1}<em>{t-n+1})} + \lambda</em>{w^{t-1}<em>{t-n+1}}P</em>{Abs}(w_t|w^{t-1}_{t-n+2})<br>$$</p>
+<p><strong>$\lambda_{w^{t-1}_{t-n+1}}$​​归一化参数计算</strong></p>
+<p>对词频数较高的n-gram来说，减去一个小于1的值D对概率影响不大，因此这种做法主要是针对估计不准、词频数较低的情况。$\lambda_{w^{t-1}<em>{t-n+1}}$​为归一化参数，其计算式为：<br>$$<br>1 - \lambda</em>{w^{t-1}<em>{t-n+1}} = \frac{D}{\sum</em>{w_i}{C(w^i_{i-n+1})}}N_{1+}(w^{t-1}_{t-n+1}.)<br>$$<br><strong>减值系数D计算：</strong></p>
+<p>其中$r_1$和$r_2$是训练语料中刚好出现1次和2次的n元语法的总数，n是被插值的模型的阶数。<br>$$<br>D = \frac{r_1}{r_1+2r_2}<br>$$</p>
+<h3 id="Kneser-Ney-smoothing"><a href="#Kneser-Ney-smoothing" class="headerlink" title="Kneser-Ney smoothing"></a>Kneser-Ney smoothing</h3><p>Knerser-Ney平滑方法是一种扩展的绝对减值平滑算法，采用了一种新的高低阶结合的方式来处理平滑。在前面介绍的高低阶模型结合算法中，低阶模型被平滑过的。但理想情况下，<strong>低阶模型只有在高阶模型的次数较少时才有较大的作用</strong>。</p>
+<p>让我们通过一个例子来辅助理解：</p>
+<ul>
+<li>I can’t see without my …….?</li>
+</ul>
+<p>现在有替补词汇“glasses”和“Francisco”，由于Francisco很常见，而且通常只出现在San后面。由于$P(Francisco)$​很大，如果采用绝对折扣法进行平滑处理，那么Francisco会和其他词如my结合成为一个新的bigram，也会被赋予一个较大的概率值，这显然是不合理的。</p>
+<p><strong>因此Kneser-Ney提出：使用的低阶模型的概率不应与其词频数成正比，而应与其能组成的不同的词的种类数成正比。因为假设某个词所形成的不同词组越丰富，则该词越容易与其他词形成新的词组，因此概率越高。</strong></p>
+<p>很明显我们这里的Francisco在这个条件下的概率值应该更低。因此我们看出来Kneser-Ney和上面介绍的模型的区别如下：</p>
+<ul>
+<li>普通的模型估计词$w_t$出现的概率值：$P(w_t) = \frac{C(w_t)}{\sum_{w_i}C(w_i)}$​</li>
+<li>KN改进后的计算方法是，统计词$w_t$​成为某个词的一个新的连续词的可能性：$P_{continuactionCount} = \frac{N_{1+(.w_t)}}{N_{1+}(..)}$​</li>
+</ul>
+<p><strong>Kneser-Ney平滑公式</strong>：<br>$$<br>P_{KN}(w_t|w^{t-1}<em>{t-n+1}) = \frac{max(C</em>{KN}(w^t_{t-n+1})-D, 0)}{C_{KN}(w^{t-1}<em>{t-n+1})} + \lambda</em>{w^{t-1}<em>{t-n+1}}P</em>{KN}(w_t|w^{t-1}<em>{t-n+2})<br>$$<br>其中$C</em>{KN}(w^t_{t-n+1})$和$\lambda_{w^{t-1}<em>{t-n+1}}$计算公式如下：<br>$$<br>C</em>{KN}(.)=\left{<br>\begin{aligned}<br>&amp; count(.),\qquad \qquad for,the,highest,order,ngram\<br>&amp; contiuationCount(.), \qquad  \qquad for,all,other,low,order,ngrams\<br>\end{aligned}<br>\right.<br>$$</p>
+<p>$$<br>1 - \lambda_{w^{t-1}<em>{t-n+1}} = \frac{D}{\sum</em>{w_i}{C(w^i_{i-n+1})}}N_{1+}(w^{t-1}_{t-n+1}.)<br>$$</p>
+<p>$C_{KN}(.)$这个计算函数根据插值组合处于哪个层级而选择不同的计算方法，比如我们要训练trigram模型，那么可以将trigram看作高阶n-gram，而将bigram和unigram看作低阶n-gram。</p>
+<p>因此计算高阶trigram时，计算公式如下：<br>$$<br>P_{KN}(w_t|w_{t-2}w_{t-1}) = \frac{max(C(w_{t-2}w_{t-1}w_t)-D, 0)}{C(w_{t-2}w_{t-1})} + \lambda_{w_{t-2}w_{t-1}}P_{KN}(w_t|w_{t-1})<br>$$<br>而计算bigram时，计算公式如下：<br>$$<br>P_{KN}(w_t|w_{t-1}) = \frac{max(N_{1+}(.w_{t-1}w_t)-D, 0)}{N_{1+}(.w_{t-1})} + \lambda_{w_{t-1}}P_{KN}(w_t)<br>$$</p>
+<h3 id="Modified-Kneser-Ney-smoothing"><a href="#Modified-Kneser-Ney-smoothing" class="headerlink" title="Modified Kneser-Ney smoothing"></a>Modified Kneser-Ney smoothing</h3><p>另外Chen和Goodman还提出了一种改进的Kneser-Ney平滑算法，不同于对原算法中所有的n-gram词频数减去一个固定值D，因为词频为1或2的理想减值D与词频较高的n-gram的减值有较大不同。改进后的算法对词频数为1、2、大于3这三种情况，分别使用三个不同的减值系数$D_1, D_2, D_{3+}$​​，计算公式如下：<br>$$<br>Y= \frac{N_1}{N_1+2N_2}, D_1=1-2Y\frac{N_2}{N_1}, D_2 = 2-3Y\frac{N_3}{N_2}, D_3 = 3-4Y\frac{N_4}{N_3}<br>$$</p>
+<h3 id="平滑方法的比较"><a href="#平滑方法的比较" class="headerlink" title="平滑方法的比较"></a>平滑方法的比较</h3><p>Chen和Goodman针对上面的平滑方法做了大量实验，实验评测指标为：测试语料的交叉熵和语音识别的字错误率。得到了如下的结论：</p>
+<ul>
+<li><p>一般而言，插值法的性能要优于回退法，Kneser-Ney平滑方法和Modified Kneser-Ney平滑要优于其他算法。</p>
+</li>
+<li><p>不管训练语料规模多大，对于二元和三元语言模型，Kneser-Ney平滑方法和Modified Kneser-Ney平滑方法效果都好于其他平滑方法。</p>
+</li>
+<li><p>一般情况下，Katz平滑和Jelinek-Bell平滑有较好的效果，但仍然比不上Kneser-Ney和Modified Kneser-Ney平滑方法。</p>
+</li>
+<li><p>在稀疏数据的情况下，Jelinek-Bell平滑优于Katz平滑。而在大量数据的情况下，Katz平滑优于Jelinek-Bell平滑。</p>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%BB%9F%E8%AE%A1%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">统计语言模型</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/09/08/asr_lm-prune_20210908/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">统计语言模型之模型剪枝算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/08/06/cpp_chapter5_20210809/">
+                        <span class="hidden-mobile">C++ Primer Plus 课后习题 第五章</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
