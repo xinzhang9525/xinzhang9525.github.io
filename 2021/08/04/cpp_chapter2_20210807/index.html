@@ -18,7 +18,7 @@
   <meta name="author" content="Xin Zhang">
   <meta name="keywords" content="">
   
-  <title>C++ Primer Plus 课后习题 第二章 - Xin-blog</title>
+  <title>C++ Primer Plus 课后习题 第二章 - 星河</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -232,60 +232,35 @@
 <p>C++程序的模块叫什么？</p>
 </blockquote>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tex">函数。C++程序由一个或多个被称为函数的模块组成。<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-2"><a href="#2-6-2" class="headerlink" title="2.6.2"></a>2.6.2</h3><blockquote>
 <p>下面的预处理器编译指令是做什么用的？ </p>
-<p>#include &lt;iostream&gt;</p>
-</blockquote>
+<h1 id="include"><a href="#include" class="headerlink" title="include \"></a>include \<iostream></h1></blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">该编译指令导致预处理器将iostream文件的内容添加到程序中。这是一种典型的预处理操作：在源文件代码被编译之前，替换或添加文本。<br>其中iostream中的io指的是输入和输出，C++的输入输出方案涉及iostream文件中的多个定义。<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-3"><a href="#2-6-3" class="headerlink" title="2.6.3"></a>2.6.3</h3><blockquote>
 <p>下面的语句是做什么用的？</p>
 <p>using namespace std;</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">C++使用名称空间来管理不同厂商提供的相同函数名，这里表示指定编译器使用std名称空间下的函数。<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-4"><a href="#2-6-4" class="headerlink" title="2.6.4"></a>2.6.4</h3><blockquote>
 <p>什么语句可以用来打印短语 “Hello, world”, 然后开始新的一行？</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	cout &lt;&lt; <span class="hljs-string">&quot;Hello, world&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-5"><a href="#2-6-5" class="headerlink" title="2.6.5"></a>2.6.5</h3><blockquote>
 <p>什么语句可以用来创建名为cheeses的整数变量？</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">int</span> cheeses;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-6"><a href="#2-6-6" class="headerlink" title="2.6.6"></a>2.6.6</h3><blockquote>
 <p>什么语句可以用来将值32赋给变量cheeses？</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">int</span> cheeses;<br>	cheeses = <span class="hljs-number">32</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-7"><a href="#2-6-7" class="headerlink" title="2.6.7"></a>2.6.7</h3><blockquote>
 <p>什么语句可以用来将从键盘输入的值读入变量cheeses中？</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	cin &gt;&gt; cheeses;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-8"><a href="#2-6-8" class="headerlink" title="2.6.8"></a>2.6.8</h3><blockquote>
 <p>什么语句可以用来打印“We have X varieties of cheese”，其中X为变量cheeses的当前值？</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> cheeses;<br>	cin &gt;&gt; cheeses;<br>	cout &lt;&lt; <span class="hljs-string">&quot;We have X varieties of &quot;</span> &lt;&lt; cheeses &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-9"><a href="#2-6-9" class="headerlink" title="2.6.9"></a>2.6.9</h3><blockquote>
 <p>下面的函数原型指出了关于函数的哪些信息？</p>
 <p>int froop(double t);</p>
@@ -293,41 +268,25 @@
 <p>int prune(void);</p>
 </blockquote>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs tex">定义了函数的返回类型。<br>定义了函数的传入参数类型。<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-10"><a href="#2-6-10" class="headerlink" title="2.6.10"></a>2.6.10</h3><blockquote>
 <p>定义函数时，在什么情况下不必使用关键字return？</p>
 </blockquote>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tex">在函数不需要具体返回值时。<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-6-11"><a href="#2-6-11" class="headerlink" title="2.6.11"></a>2.6.11</h3><blockquote>
 <p>假设您编写的main()函数包含如下代码：</p>
 <p>cout &lt;&lt; “Please enter you PIN: “;</p>
 <p>而编译器指出cout是一个未知标识符，导致这种问题的原因是什么？指出三种修复这种问题的方法。</p>
 </blockquote>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp">未引入cout的相关声明<br>未引入相应名称空间<br></code></pre></td></tr></table></figure>
-
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// 方案一</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Please enter you PIN: &quot;</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><br><span class="hljs-comment">//方案二</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Please enter you PIN: &quot;</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><br><span class="hljs-comment">//方案三</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">using</span> std::cout;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Please enter you PIN: &quot;</span>;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-7-1"><a href="#2-7-1" class="headerlink" title="2.7.1"></a>2.7.1</h3><blockquote>
 <p>编写一个C++程序，它显示您的姓名和地址</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Yuanzhi&quot;</span> &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">&quot;yuanzhi@ruc.edu.cn&quot;</span> &lt;&lt; endl;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-7-2"><a href="#2-7-2" class="headerlink" title="2.7.2"></a>2.7.2</h3><blockquote>
 <p>编写一个C++程序，它要求用户输入一个以long为单位的距离，然后将它转换为码（一long等于200码）。</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">double</span> distance = <span class="hljs-number">0.0</span>;<br>    cin &gt;&gt; distance;<br>    cout &lt;&lt; distance*<span class="hljs-number">220</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-7-3"><a href="#2-7-3" class="headerlink" title="2.7.3"></a>2.7.3</h3><blockquote>
 <p>编写一个C++程序，它使用3个用户定义的函数（包括main()），并生成下面的输出：</p>
 <p>Three blind mice</p>
@@ -337,17 +296,11 @@
 <p>其中一个函数要调用两次，该函数生成前两行；另一个函数也要被调用两次，生成余下的输出。</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">cluster_one</span><span class="hljs-params">()</span></span>&#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Three blind mice&quot;</span> &lt;&lt; endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">cluster_two</span><span class="hljs-params">()</span></span>&#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;See how they run&quot;</span> &lt;&lt; endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">cluster_one</span>();<br>    <span class="hljs-built_in">cluster_one</span>();<br>    <span class="hljs-built_in">cluster_two</span>();<br>    <span class="hljs-built_in">cluster_two</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-7-4"><a href="#2-7-4" class="headerlink" title="2.7.4"></a>2.7.4</h3><blockquote>
 <p>编写一个程序，让用户输入其年龄，然后显示该年龄包含多少个月，如下所示：</p>
 <p>Enter your age: 29</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> age_years = <span class="hljs-number">0</span>;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter your age: &quot;</span>;<br>    cin &gt;&gt; age_years;<br>    <br>    cout &lt;&lt; age_years * <span class="hljs-number">12</span>;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-7-5"><a href="#2-7-5" class="headerlink" title="2.7.5"></a>2.7.5</h3><blockquote>
 <p>编写一个程序，其中的main()调用一个用户定义的函数（以摄氏温度值为参数，并返回相应的华氏温度值）。该程序按照下面的格式要求用户输入摄氏温度值，并显示结果：</p>
 <p>Please enter a Celsius value: 20</p>
@@ -355,9 +308,6 @@
 <p>下面是转换公式：华氏温度=1.8 × 摄氏温度 + 32.0</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">convert_celsius_to_fahrenheit</span><span class="hljs-params">(<span class="hljs-keyword">double</span> celsius_value)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1.8</span>*celsius_value + <span class="hljs-number">32.0</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">double</span> celsius_value = <span class="hljs-number">0.0</span>;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Please enter a Celsius value: &quot;</span>;<br>    cin &gt;&gt; celsius_value;<br>    <br>    fahrenheit_value = <span class="hljs-built_in">convert_celsius_to_fahrenheit</span>(celsius_value);<br>    cout &lt;&lt; celsius_value &lt;&lt; <span class="hljs-string">&quot; degrees Celsius is &quot;</span> &lt;&lt; fahreheit_value &lt;&lt; <span class="hljs-string">&quot; degrees Fahrenheit.&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-7-6"><a href="#2-7-6" class="headerlink" title="2.7.6"></a>2.7.6</h3><blockquote>
 <p>编写一个程序，其main()调用一个用户定义的函数（以光年值为参数，并返回对应天文单位的值）。该程序按下面的格式要求用户输入光年值，并显示结果：</p>
 <p>Enter the number of light years: 4.2</p>
@@ -365,9 +315,6 @@
 <p>转换公式：1光年=63240天文单位。</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">conver_lightyears_to_astronomical</span><span class="hljs-params">(<span class="hljs-keyword">double</span> light_years)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> light_years * <span class="hljs-number">63240</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">double</span> light_years = <span class="hljs-number">0.0</span>;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the number of light years: &quot;</span>;<br>    cin &gt;&gt; light_years;<br>    <br>    astronomical = <span class="hljs-built_in">conver_lightyears_to_astronomical</span>(light_years);<br>    <br>    cout &lt;&lt; light_years &lt;&lt; <span class="hljs-string">&quot; light years = &quot;</span> &lt;&lt; astronomical &lt;&lt; <span class="hljs-string">&quot; astronomical units&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <h3 id="2-7-7"><a href="#2-7-7" class="headerlink" title="2.7.7"></a>2.7.7</h3><blockquote>
 <p>编写一个程序，要求用户输入小时数和分钟数。在main()函数中，将这两个值传递给一个void函数，后者以下面这样的格式显示这两个值：</p>
 <p>Enter the number of hours: 9</p>
@@ -375,7 +322,6 @@
 <p>Time: 9:28</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">concat_hour_and_minute</span><span class="hljs-params">(<span class="hljs-keyword">int</span> hours, <span class="hljs-keyword">int</span> minutes)</span></span>&#123;<br>    cout &lt;&lt; hours &lt;&lt; <span class="hljs-string">&quot;:&quot;</span> &lt;&lt; minutes &lt;&lt; endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> hours = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">int</span> minutes = <span class="hljs-number">0</span>;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the number of hours: &quot;</span>;<br>    cin &gt;&gt; hours;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Enter the number of minutes: &quot;</span>;<br>    cin &gt;&gt; minutes;<br>    <span class="hljs-built_in">concat_hour_and_minute</span>(hours, minutes);<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 
             </div>
             <hr>
@@ -562,6 +508,45 @@
 
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
 
 
 
