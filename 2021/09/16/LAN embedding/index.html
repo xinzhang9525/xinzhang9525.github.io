@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="处理数据; 简单变量; const限定符; 浮点数; C++算数运算符; 总结">
+  <meta name="description" content="Knowledge Graph; Embedding;">
   <meta name="author" content="Xin Zhang">
   <meta name="keywords" content="">
   
-  <title>C++ Primer Plus 课后习题 第三章 - 星河</title>
+  <title>Logic Attention Based Neighborhood Aggregation for Inductive Knowledge Graph Embedding - 星河</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="C++ Primer Plus 课后习题 第三章">
+            <span class="h2" id="subtitle" title="Logic Attention Based Neighborhood Aggregation for Inductive Knowledge Graph Embedding">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-08-04 09:00" pubdate>
-        2021年8月4日 上午
+      <time datetime="2021-09-16 16:00" pubdate>
+        2021年9月16日 下午
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      75 字
+      1.9k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      24
        分钟
     </span>
   
@@ -225,18 +225,78 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">C++ Primer Plus 课后习题 第三章</h1>
+            <h1 style="display: none">Logic Attention Based Neighborhood Aggregation for Inductive Knowledge Graph Embedding</h1>
             
             <div class="markdown-body">
-              <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+              <h3 id="Logic-Attention-Based-Neighborhood-Aggregation-for-Inductive-Knowledge-Graph-Embedding"><a href="#Logic-Attention-Based-Neighborhood-Aggregation-for-Inductive-Knowledge-Graph-Embedding" class="headerlink" title="Logic Attention Based Neighborhood Aggregation for Inductive Knowledge Graph Embedding"></a>Logic Attention Based Neighborhood Aggregation for Inductive Knowledge Graph Embedding</h3><ol>
+<li><p>背景</p>
+<p>基于知识图谱$G=(V, E)$, 如何进行知识的推理是十分重要的任务。假设$(s, o, r)$表示图谱中的一条边（发生的事件），其中s,o代表节点，r是关系类型，那么知识推理的一个例子就是：在已知s和r的情况下，推理出o是哪个节点。同理，在缺失s的情况下，预测s是哪个节点。本文没有考虑时间的因素，如果考虑$(s,o,r,t)$, 其中t是代表该事件发生的时间，更强大的知识图谱推理，具有补全实体或者时间的能力。</p>
+<p>实现推理的一类工具是节点的编码。过去对于静态图的编码取得了一定的效果，如deep_walk, node2vec, Line等，但是这些编码方式，要求所有的节点都出现在图谱中；而现实中，随着时间推移，一定会有之前没包含在图谱的节点出现。面对这种情况，过去的静态编码方法，只能纳入新的数据，以全量数据重新训练模型。这在工程应用中，不仅计算代价可能较大，并且频繁的更新模型，会造成模型结果的不稳定。</p>
+<p>本文的编码方法：具有推理能力，且可以处理新增节点的快速编码(out of sample).</p>
+</li>
+<li><p>动机</p>
+<p>（1）当图编码过程完成后，快速的给新出现的节点进行编码。在训练编码的过程中，采用aggregator的方式，利用相邻节点以及涉及到的关系类型，对节点进行编码。该框架没有downstream任务，可以无监督的训练。</p>
+<p>（2）本文主要是讲述构造aggregator的方式，其中作者想要构造的聚合器有如下性质:</p>
+<p>​    · 聚合时，邻居节点是不应该考虑顺序的。例如简单的mean-pooling是可以的，而LSTM是不合适的，这一点应该根据实际问题出发，酌情考虑。作者的出发点是，当新增节点(emerging entity)出现时，节点Chicago_Bulls 和 American的重要性跟他们在邻居序列中的位置无关。</p>
+<p>​    · 整体上来说，各类关系之间存在信息的包含，于是在聚合时，aggregator要有识别冗余信息(play_for 包含work_as的信息)以及关注重点关系（通常我们需要索引 live_in的时候，需要关注到与其相关的信息 e.g.play_for Chicago_Bulls）的机制。</p>
+<p>​    <img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200402143903095.png" srcset="/img/loading.gif" lazyload alt="image-20200402143903095" style="zoom:67%;" /></p>
+</li>
+</ol>
+<ol>
+<li><p>框架</p>
+<p>2.1 主要符号</p>
+<p>$\varepsilon$ 和 $\mathcal{R}$表示节点和边的集合，数量分别为n和m. 知识图谱由一系列的三元组组成：</p>
+<script type="math/tex; mode=display">
+\mathcal{K} = \{(s,r,o)|s\in \varepsilon , r\in \mathcal{R},o\in\varepsilon \}</script><p>对任意$\mathcal{K}$中的三元组(s,r,o),对应的加入(o, r^{-1}, o).</p>
+<p>对任意的实体$e\in \varepsilon$，定义邻居（边和点的集合），及邻居在节点和关系集合的投影分别为:</p>
+<script type="math/tex; mode=display">
+N_{\mathcal K}(e) = \{(r, e')|(e, r, e')\in \mathcal K  \}</script><script type="math/tex; mode=display">
+N_{\varepsilon}:N_{\mathcal K}(e) \rightarrow \varepsilon</script><script type="math/tex; mode=display">
+N_{\mathcal R} :N_{\mathcal K}(e) \rightarrow \mathcal R</script><p>2.2 目标</p>
+<p>在给定的知识图谱上，学习一个邻居聚合器A，对一个节点$e_i \in \varepsilon$</p>
+<script type="math/tex; mode=display">
+A: N_{\mathcal K}(e_i)\rightarrow R^d</script><p>并且对一个未知的三元组(s,r,o)的可能性建立在A的结果上, 为了区分邻居中的关系r，位置三元组改为(s, q, o)</p>
+<p><img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200402152134913.png" srcset="/img/loading.gif" lazyload alt="image-20200402152134913" style="zoom:50%;" /></p>
+<p>2.3 encoder</p>
+<p>如图二所示，对一个节点$e_i$（图中的乔丹大帝和芝加哥），实质是存在两套编码，即图中input embedding 和output embedding, encoder作用在$e_i$的邻居节点的输入编码上。令$e_i$的邻居$(r, e_j) \in N_{\mathcal K} (e_i)$, $e_j$的输入编码记为${e}_j^{I}$, 则特点关系的转移方程如下：</p>
+<script type="math/tex; mode=display">
+T_r(\bold e_j^I) = \bold{e}_j^I - \bold{w}_r^T \bold{e}_j^I\bold{w}_r,</script><p>目标$e_i$输出编码为：</p>
+<script type="math/tex; mode=display">
+\bold{e}_i^O = A(\{(r,e_j)\in N_{\mathcal K}(i) \}).</script><p>A的作用实质上是将一堆d维向量，聚集成一根d维向量。作为对比，可以选择简单的平均，以及复杂的LSTM.</p>
+<p>本文采取加权求和的方式，聚合向量:</p>
+<script type="math/tex; mode=display">
+\bold{e}_i^O = \sum_{(r,e_j)\in N_{\mathcal K}(i)}\alpha_{j|i,q} T_r(\bold{e}_j^I)</script><p>为了使A满足上述的性质， 需仔细的构造$\alpha_{j|i,q}$，该系数不仅与邻居节点编码有关，也与邻居关系r和需要索引的关系q有关。</p>
+<p>2.3.1 逻辑法则机制(logic rule mechanism)</p>
+<p>对一个节点e， 它的邻居关系$r_1, r_2$，可能存在信息的包含关系 ，比如play_for可能推导出live_in，记他们的潜在关联规则为$r_1 \Rightarrow r_2$，定义规则的置信度为：</p>
+<script type="math/tex; mode=display">
+\mathcal P(r_1\Rightarrow r_2)= \frac{\sum_{e\in \varepsilon}1(r_1\in N_{\mathcal R}(e) \wedge r_2\in N_{\mathcal R}(e)) }{ \sum_{e\in \varepsilon}1(r_1\in N_{\mathcal R}(e))}.</script><script type="math/tex; mode=display">
+\alpha_{j|i,q}^{Logic} = \frac{\mathcal P(r\Rightarrow q)}{max(\{\mathcal P(r'\Rightarrow r)|r' \in N_{\mathcal R}(e_i) \wedge r'\neq r\})}</script></li>
+</ol>
+<p>   2.3.2 神经网络机制(neural network mechanism)</p>
+<p>   给定关系q，$e_i$的邻居$e_j$的重要性为：</p>
+<script type="math/tex; mode=display">
+   \alpha_{j|i,q}^{NN} = softmax(\alpha_{j|i,q}')=\frac{exp(\alpha'_{j|i,q})}{\sum_{j'\in N_{\varepsilon}(i)} exp(\alpha'_{j'|i,q})}</script><p>   其中：</p>
+<script type="math/tex; mode=display">
+   \alpha_{j|i,q}'=\bold u_a^T \cdot tanh(\bold W_a \cdot [z_q ; T_r({\bold e}_j^I)])</script><p>   ${\bold u}_a^T$, ${\bold W}_a$ 和$\bold z_q$是训练参数。</p>
+<p>   综合2.3.1和2.3.2，：</p>
+<script type="math/tex; mode=display">
+   \bold e_i^O = \sum_{(r,e_j)\in N_{\mathcal K}(i)} (\alpha_{j|i,q}^{Logic} + \alpha_{j|i,q}^{NN}) T_r(\bold e_j^I)</script><p>   2.4 decoder</p>
+<p>   从encoder， 给出施加方和承受方的编码${\bold s}^O$和${\bold o}^O$, decoder被用来衡量该训练三元组的合理性(plausibility)，$\bold W_r  \in R^{m\times d}$是用来做关系转移的那个矩阵见2.3第一个方程。则decoder给(s,q,o)的打分函数为:</p>
+<script type="math/tex; mode=display">
+   \phi^O(s,q,o)=-|\bold s^O + \bold q - \bold o^O|_{L1},</script><p>   2.5 目标函数</p>
+<p>   为了训练模型，需要构造正样本和负样本，$\mathcal K$中的三元组都是正样本，记作$\Delta$, 对一个正样本(s,q,o)，随机替换s或者o，不同时替换：</p>
+<script type="math/tex; mode=display">
+   \Delta'_{(s,q,o)} = \{(s',q,o)|s'\in \varepsilon\} \cup \{(s,q,o')|o'\in \varepsilon\}</script><script type="math/tex; mode=display">
+   l^O(s,q,o) = [\gamma - \phi^O(s,q,o)+\phi^O(s',q,o')]_+</script><p>   其中$[x]_+ = max(0, x)$, $\gamma$是一个超参数。于是训练的目标函数为：</p>
+<script type="math/tex; mode=display">
+   min \sum_{(s,q,o)\in\Delta}\sum_{(s',q,o')\in \Delta'_{(s,q,o)}} l^O(s,q,o).</script><ol>
+<li><p>备注</p>
+<p>（1）本文在编码器中整合aggregator，解决了网络新增节点的问题，预计速度较快，因为只用lookup几个邻居节点和边的编码，加权求和即可；</p>
+<p>（2）本文是通过糅合聚合器，同时解决编码和新增节点问题，如果工程上已有取得不错效果的编码（如node2vec，line等），可能需要一个独立于编码器的组件，来处理新增节点。可见本专栏另一篇关于恶意软件的论文分享。</p>
+<p>（3）聚合器中的权重，既可以从神经网络中自动提取，同时也可以人为定义；作者提出的聚合器需要满足的性质，可根据应用的具体场景而定，比如邻居关系与发生的时间有紧密关系，则可加入按时间衰减的机制，或者邻居根据发生的时间有天然的序列属性，使用LSTM有可能会挖掘到高度非线性特征，取得更好的效果。</p>
+<p>（4）极端的情况下，新增的节点未与任何已有节点相连，模型就会失效。</p>
+</li>
+</ol>
 
             </div>
             <hr>
@@ -246,9 +306,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98%E7%AD%94%E6%A1%88/">课后习题答案</a>
-                    
-                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98%E7%AD%94%E6%A1%88/C-Primer-Plus-6th/">C++ Primer Plus 6th</a>
+                      <a class="hover-with-bg" href="/categories/Graph-Embedding/">Graph Embedding</a>
                     
                   </div>
                 
@@ -266,9 +324,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/08/05/cpp_chapter4_20210808/">
+                      <a href="/2021/09/16/Scalable%20out-of-sample%20extension%20of%20graph%20embeddings%20using%20deep%20neural%20networks/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">C++ Primer Plus 课后习题 第四章</span>
+                        <span class="hidden-mobile">Scalable out-of-sample extension of graph embeddings using deep neural networks</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -276,8 +334,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/08/04/2021-08-04-hello-world/">
-                        <span class="hidden-mobile">C++ Primer Plus 课后习题 第二章</span>
+                      <a href="/2021/09/08/asr_lm-prune_20210908/">
+                        <span class="hidden-mobile">统计语言模型之模型剪枝算法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

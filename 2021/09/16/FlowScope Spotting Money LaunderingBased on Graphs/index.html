@@ -1,0 +1,563 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Knowledge Graph; Embedding;">
+  <meta name="author" content="Xin Zhang">
+  <meta name="keywords" content="">
+  
+  <title>FlowScope:Spotting Money Laundering Based on Graphs - 星河</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Xin</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/background/pexels.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="FlowScope:Spotting Money Laundering Based on Graphs">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-09-16 16:40" pubdate>
+        2021年9月16日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">FlowScope:Spotting Money Laundering Based on Graphs</h1>
+            
+            <div class="markdown-body">
+              <h1 id="一、总览"><a href="#一、总览" class="headerlink" title="一、总览"></a>一、总览</h1><p>顾名思义，原文旨在通过图相关方法，发现洗钱行为。洗钱行为表示犯罪分子通过银行将大量的非法所得转移至无法追溯的终点，而不被发现。现有的关于反欺诈的图相关方法主要关注紧密子图的发现，而不考虑洗钱过程中存在大量金钱转移的事实，从而降低了探查准确率。原文提出的FlowScope 方法不仅可以量化整个洗钱过程，而且从理论层面可以提出了正常交易中不被探查的金额上限。</p>
+<p>原文地址：<a target="_blank" rel="noopener" href="http://www.shichuan.org/doc/78.pdf">http://www.shichuan.org/doc/78.pdf</a></p>
+<p>源码地址：<a target="_blank" rel="noopener" href="https://github.com/aplaceof/FlowScope">https://github.com/aplaceof/FlowScope</a></p>
+<h1 id="二、简介与相关工作"><a href="#二、简介与相关工作" class="headerlink" title="二、简介与相关工作"></a>二、简介与相关工作</h1><p>在已有的很多反洗钱算法中，均有不同程度的缺陷，其中比较典型的问题包括：</p>
+<ol>
+<li>忽略金钱转移链的模式，同时忽略交易过程中的复杂依赖，特别是节点间的复杂资金往来记录，从而会降低准确率。</li>
+<li>有些考虑金钱转移链的模式的，需要用监督学习的方案进行学习，而反洗钱场景中，有效标签量非常难以获取。同时，在很多通过对抗网络获得的模型，因为样本的严重不平衡，可能存在模型健壮性欠佳的情况。</li>
+<li>部分以业务经验为基础的算法，虽然短期有效，但容易被违法者攻破。</li>
+</ol>
+<p>而FlowScope主要包含以下优势：</p>
+<ol>
+<li>提出一种新的洗钱发现方法，这种方法可以很好的发现紧密交易和多步骤洗钱的信息。</li>
+<li>严谨的理论证明，不仅证明此方法的有效性，同时可以给出犯罪分子在该模型下可以转出资金而不被发现的上限。</li>
+<li>高效性和健壮性。</li>
+<li>可扩展性，同时在上面的github地址给出扩展样例。</li>
+</ol>
+<h1 id="三、问题定义"><a href="#三、问题定义" class="headerlink" title="三、问题定义"></a>三、问题定义</h1><p>在定义问题前，我们阐述洗钱过程中的两个重要特点（从我个人工作经历来看，对下面两点高度赞同）：</p>
+<ol>
+<li>密集的转账记录：参与洗钱卡，会产生大量的转入转出记录，并且会总的转入转出金额很大。</li>
+<li>中间账户的余额通常很小：中间账户一般作为桥梁，不会存放资金。（个人经验：在个别情况下，还存在转入后快速转出，中间停留时间在数分钟到数小时不等。）</li>
+</ol>
+<p>此方法重点关注这类型的账号。</p>
+<p>核心问题可以定义为：</p>
+<p>在一个资金流水图中$\mathcal{G} = (\mathcal{V}, \mathcal{E})$，其中卡号作为节点$\mathcal{V}$，转移资金量作为边$\mathcal{E}$。那么目的可以是找到一个$\mathcal{G}$的子图，并满足以下条件：</p>
+<ol>
+<li>交易流水在转入这批中间账户和转出这批中间账户的过程中有很大量。</li>
+<li>由下面的定义的新标准，保证资金流动量在子图中最大。那么定义的ML metric则即为重要。</li>
+</ol>
+<p>下图展示在后续解释中可能出现的重要符号：</p>
+<p><img src="G:\work\模型中心\19. X_lab\自己读的内容\17_FLOWSCOPE\11111.jpg" srcset="/img/loading.gif" lazyload alt="11111"></p>
+<p>通常，图$\mathcal{G} = (\mathcal{V}, \mathcal{E})​$中的节点$\mathcal{V} = \mathcal{X} \bigcup \mathcal{W} \bigcup \mathcal{Y}​$，其中$\mathcal{W}​$表示洗钱桥梁，$\mathcal{X}​$和$\mathcal{Y}​$分别代表金钱来源（整体情况为转入中间层）和资金去向（整体情况为从中间层转出）的卡号。一条边$(i,j)\in \mathcal{E}​$表示在节点集合$\mathcal{V}中，​$卡号$v_i​$转至卡号$v_j​$的资金量$e_{ij}​$。</p>
+<h1 id="四、核心"><a href="#四、核心" class="headerlink" title="四、核心"></a>四、核心</h1><p>这部分主要分三个小点，阅读建议着重理解ML metric。只有足够好的理解第一部分，才能更好的理解第二部分。</p>
+<h2 id="1-ML-metric"><a href="#1-ML-metric" class="headerlink" title="1. ML metric"></a>1. ML metric</h2><p>定义ML metric的目的是发现紧密资金转移的现象。</p>
+<p>定义节点子集$\mathcal{S} = \mathcal{A} \bigcup \mathcal{M_1} \bigcup … \bigcup \mathcal{M_{k-2} \bigcup \mathcal{C}}$，其中$\mathcal{A} \subseteq \mathcal{X}, \mathcal{M_i} \subseteq \mathcal{W}, \mathcal{C} \subseteq \mathcal{Y}$，其中在$\mathcal{M_1}, … , \mathcal{M_{k-2}}$中可能存在节点重合的情况。但在实际情况中，如果资金链条形成闭环更容易被执法者发现，因此我们主动忽略这样的影响。在上面的式子中，我们可以认为总共有$k$层数据，其中第0层为$\mathcal{X}$，第$k$层为$\mathcal{Y}$。</p>
+<p>同时定义$e_{ij}​$表示为从节点$v_i​$转至节点$v_j​$的资金总量。那么对于节点$v_i \in \mathcal{M_l}, l\in {1, 2, … , k-2}​$，定义在子集$\mathcal{S}​$总的资金转出量与资金转入量分别为：</p>
+<script type="math/tex; mode=display">
+d^+_i(s) = \sum_{v_j\in M_{l+1}\wedge(i,j)\in \mathcal{E}} e_{ij}
+\\
+d^-_i(s) = \sum_{v_k\in M_{l-1}\wedge(k,i)\in \mathcal{E}} e_{ki}</script><p>下面定义在子集$\mathcal{S}$下资金流转的最小，最大量分别为：</p>
+<script type="math/tex; mode=display">
+f_i(s) = \min\{d^+_i(S), d^-_i(S)\}, \forall v_i \in \mathcal{M_l}
+\\
+q_i(s) = \max\{d^+_i(S), d^-_i(S)\}, \forall v_i \in \mathcal{M_l}</script><p>那么，则可以定义ML metric为：</p>
+<script type="math/tex; mode=display">
+g^k(\mathcal{S}) = \frac{1}{|\mathcal{S}|}\sum^{k-2}_{l=1}\sum_{v_i\in \mathcal{M_l}} f_i(\mathcal{S}) - \lambda (q_i(\mathcal{S}) - f_i(\mathcal{S}))
+\\
+= \frac{1}{|\mathcal{S}|}\sum^{k-2}_{l=1}\sum_{v_i\in \mathcal{M_l}} (1+\lambda)f_i(\mathcal{S}) - \lambda q_i(\mathcal{S}), k\geq 3</script><p>有定义可知$q_i(\mathcal{S}) - f_i(\mathcal{S})$是剩余在$v_i$卡号上的余额，这个可以被认为是针对ML过程中桥梁卡号通常余额很小的惩罚项。对上式中的$\lambda$可以定义为转账过程中必须产生的手续费等开销。这样我们定义的$g(\mathcal{S})$则可以认为是洗钱后的剩余利润。</p>
+<p><img src="G:\work\模型中心\19. X_lab\自己读的内容\17_FLOWSCOPE\2222.jpg" srcset="/img/loading.gif" lazyload alt="2222"></p>
+<p>举个例子，上图中表示的是一个ML过程。A（资金流入卡号），M（桥梁卡号），C（资金流出卡号）分别有4,12,2个卡号。$v_5$转移了将近452.1M元，同时$q_5(\mathcal{S}) - f_5(\mathcal{S}) \approx 0$，这就表示此卡有大量的流水转入转出，并且卡账剩余金额很少。ML metric 可以很好的捕捉到这些特点。</p>
+<h2 id="2-FlowScope"><a href="#2-FlowScope" class="headerlink" title="2. FlowScope"></a>2. FlowScope</h2><p>FlowScope的提出，目的在于找到一个$\mathcal{S}$使得我们的目标$g(\mathcal{S})$最大化。先制作一个优先树，那么对于任意节点$v_i$存在的权重定义如下：</p>
+<script type="math/tex; mode=display">
+w_i(\mathcal{S}) = \{\begin{array}{cols} 
+                    f_i(\mathcal{S}) - \frac{\lambda}{1+\lambda}q_i(\mathcal{S}),  & \mbox{if} & v_i \in \mathcal{M_l}
+                    \\
+                    d_i(\mathcal{S}), & \mbox{if} & v_i \in \mathcal{A} \cup \mathcal{C}
+                    \end{array}</script><p>那么下面则可以给出相应的贪婪优化方法：</p>
+<ol>
+<li>确定图。</li>
+<li>从现有图中移除有最小权重的点（为了最大化我们的目标）。</li>
+<li>更新图中受影响节点的权重，并计算当前图下的目标$g(\mathcal{S})$。</li>
+<li>重复2-3过程，直至A，M，C中任意一个集合的节点全部被移除。</li>
+<li>得到最大的$g(\hat{\mathcal{S}})$，同时可以找到对应子图$\hat{\mathcal{S}}$。</li>
+</ol>
+<p><img src="G:\work\模型中心\19. X_lab\自己读的内容\17_FLOWSCOPE\33333.jpg" srcset="/img/loading.gif" lazyload alt="33333"></p>
+<p>截止此处，原文中最核心的部分已经介绍完成。我个人对以下两个部分有一点疑问：</p>
+<ol>
+<li>这里有一个比较讨厌的部分是对桥梁节点的“层级”进行定义或者先验已知。这部分内容很讨厌的原因是，我们不仅不太好区分到底作为桥梁的卡有多少个“层级”，同时难以区分到底哪张卡应该隶属于哪个层级也尝尝在实际情况中遇到困难。</li>
+<li>在贪婪算法部分，停止条件是当一个节点集合为空则停止搜索。这部分内容从直觉上说可能会有点问题。在实现的时候会做一些测试。</li>
+</ol>
+<h2 id="3-分析部分"><a href="#3-分析部分" class="headerlink" title="3. 分析部分"></a>3. 分析部分</h2><h3 id="3-1-Theoretical-Bound"><a href="#3-1-Theoretical-Bound" class="headerlink" title="3.1 Theoretical Bound"></a>3.1 Theoretical Bound</h3><p>给定图和metric ML定义。那么对于任意子图，存在：</p>
+<script type="math/tex; mode=display">
+g(\hat{\mathcal{S}}) \geq \frac{|\mathcal{M^\prime}|}{|\mathcal{S^\prime}|}(g(\mathcal{S}^\star) - \lambda \epsilon)</script><p>其中$\epsilon = \max_{v_i \in \mathcal{S}^\star} \{q_i(\mathcal{V}) - q_i(\mathcal{S^\star})\}​$，表示为在该子图内转移资金量最多的账户接收转出到其他非洗钱账户的金额。</p>
+<h3 id="3-2-Bounding-Money-Laundering"><a href="#3-2-Bounding-Money-Laundering" class="headerlink" title="3.2  Bounding Money Laundering"></a>3.2  Bounding Money Laundering</h3><p>给定子图，该子图每个账号进行洗钱行为但不被发现的资金量上限为：</p>
+<script type="math/tex; mode=display">
+\frac{\sum_{v_i \in \mathcal{S}^\star}f_i(\mathcal{S}^\star)}{n_0} \leq \frac{1}{1-\lambda \eta}(\frac{|\mathcal{S}^\prime|}{|\mathcal{M}^\prime|}g(\hat{\mathcal{S}}) + \lambda \epsilon)</script><p>其中新出现的符号中，$n_0​$表示该子图的卡号数量，$\eta​$表示可能存在的其他费用。其定义为：</p>
+<script type="math/tex; mode=display">
+\eta = \frac{\sum_{v_i \in \mathcal{S}^\star}(q_i(\mathcal{S}^\star) - f_i(\mathcal{S}^\star))}{\sum_{v_i \in \mathcal{S}^\star}f_i(\mathcal{S}^\star)}, \eta \in [0, \frac{1}{\lambda}]</script><p>这两个部分的内容可以作为排查过程中的其他评价指标进行输出。</p>
+<h1 id="五、实验"><a href="#五、实验" class="headerlink" title="五、实验"></a>五、实验</h1><p>实验数据：</p>
+<ol>
+<li>CBANK，匿名银行真实数据。</li>
+<li>CFD（Czech Financial Dataset），另一个匿名银行数据，曾经用于比赛。</li>
+</ol>
+<p>对比方法SpokEN，Fraudar，D-Cube，HoloScope，RRCF。评价方法选择FAUC与F1两个评价指标。并主要点评工作效率，模型效果，健壮性。测试效果见图。</p>
+<p><img src="G:\work\模型中心\19. X_lab\自己读的内容\17_FLOWSCOPE\4444.jpg" srcset="/img/loading.gif" lazyload alt="4444"></p>
+<p>核心结论如下：</p>
+<ol>
+<li>相比其他方法，此方法能够更快、更准确的发现洗钱行为。模型计算时间随图内边数量增加称线性关系。</li>
+<li>在面对更长的资金转移链条时，表现的更稳定更健壮。</li>
+<li>模型对相关先验参数不敏感，如：$\lambda$。</li>
+</ol>
+<h1 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h1><p>原文提出了一种评价洗钱行文的量化指标，并且求解思路清晰，可执行性强。建议阅读内容如下：</p>
+<blockquote>
+<p>Guha,S.;Mishra,N.;Roy,G.;andSchrijvers,O. 2016. Robustrandomconferenceutforestbasedanomalydetectionon streams. In International conference on machine learning, 2712–2721.</p>
+<p>Hooi, B.; Song, H. A.; Beutel, A.; Shah, N.; Shin, K.; and Faloutsos, C. 2016. Fraudar: Bounding graph fraud in the face of camouﬂage. In Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 895–904. ACM.</p>
+<p>Liu, S.; Hooi, B.; and Faloutsos, C. 2017. Holoscope: Topology-and-spike aware fraud detection. In Proceedings<br>ofthe2017ACMonConferenceonInformationandKnowledge Management, 1539–1548. ACM.</p>
+<p>Liu, S.; Hooi, B.; and Faloutsos, C. 2018. A contrast metric for fraud detection in rich graphs. IEEE Transactions on Knowledge and Data Engineering.</p>
+<p>Prakash, B. A.; Sridharan, A.; Seshadri, M.; Machiraju, S.; and Faloutsos, C. 2010. Eigenspokes: Surprising patterns andscalablecommunitychippinginlargegraphs. InPaciﬁcAsiaConferenceonKnowledgeDiscoveryandDataMining, 435–448. Springer.</p>
+<p>Shin, K.; Hooi, B.; Kim, J.; and Faloutsos, C. 2017. Dcube: Dense-block detection in terabyte-scale tensors. In Proceedings of the Tenth ACM International Conference on Web Search and Data Mining, 681–689. ACM.</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Graph-Embedding/">Graph Embedding</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/09/16/Scalable%20out-of-sample%20extension%20of%20graph%20embeddings%20using%20deep%20neural%20networks/">
+                        <span class="hidden-mobile">Scalable out-of-sample extension of graph embeddings using deep neural networks</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>X</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>N</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
