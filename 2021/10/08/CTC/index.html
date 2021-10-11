@@ -229,7 +229,7 @@
             
             <div class="markdown-body">
               <h3 id="CTC"><a href="#CTC" class="headerlink" title="CTC"></a>CTC</h3><h4 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h4><p>​        在序列学习任务中，模型对训练样本一般有这样的依赖条件：输入序列和输出序列之间的映射关系已经事先标注好了。比如，在词性标注任务中，训练样本中每个词（或短语）对应的词性会事先标注好，如下图（DT、NN等都是词性的标注，含义可参考<a target="_blank" rel="noopener" href="https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html">链接</a>）。由于输入序列和输出序列是一一对应的，所以模型的训练和预测都是端到端的，即可以根据输出序列和标注样本间的差异来直接定义模型的Loss函数，传统的RNN训练和预测方式可直接适用。</p>
-<p><img src="/2021/10/08/CTC/1.jpg" srcset="/img/loading.gif" lazyload alt="1" style="zoom:40%;"></p>
+<p><img src="/2021/10/08/CTC/code\github\xinzhang9525.github.io\hexo\source\_posts\CTC\1.jpg" srcset="/img/loading.gif" lazyload alt="1" style="zoom:40%;"></p>
 <p>​        然而，在语音识别、手写字识别等任务中，由于音频数据和图像数据都是从现实世界中将模拟信号转为数字信号采集得到，这些数据天然就很难进行“分割”，这使得我们很难获取到包含输入序列和输出序列映射关系的大规模训练样本（人工标注成本巨高）。因此，在这种条件下，RNN无法直接进行端到端的训练和预测。</p>
 <p>​        如下图，输入是“apple”对应的一段说话音频和手写字图片，从连续的音频信号和图像信号中逐一分割并标注出对应的输出序列非常费时费力，在大规模训练下这种数据要求是完全不切实际的。而如果输入序列和输出序列之间映射关系没有提前标注好，那传统的RNN训练方式就不能直接适用了，无法直接对音频数据和图像数据进行训练。</p>
 <p><img src="/2021/10/08/CTC/code\github\xinzhang9525.github.io\hexo\source\img\CTC\3.jpg" srcset="/img/loading.gif" lazyload alt="3" style="zoom:40%;"></p>
