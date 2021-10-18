@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      26
+      27
        分钟
     </span>
   
@@ -228,7 +228,9 @@
             <h1 style="display: none">CTC (Connectionist Temporal Classification)</h1>
             
             <div class="markdown-body">
-              <h3 id="CTC"><a href="#CTC" class="headerlink" title="CTC"></a>CTC</h3><h4 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h4><p>​        在序列学习任务中，模型对训练样本一般有这样的依赖条件：输入序列和输出序列之间的映射关系已经事先标注好了。比如，在词性标注任务中，训练样本中每个词（或短语）对应的词性会事先标注好，如下图（DT、NN等都是词性的标注，含义可参考<a target="_blank" rel="noopener" href="https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html">链接</a>）。由于输入序列和输出序列是一一对应的，所以模型的训练和预测都是端到端的，即可以根据输出序列和标注样本间的差异来直接定义模型的Loss函数，传统的RNN训练和预测方式可直接适用。</p>
+              <h3 id="CTC"><a href="#CTC" class="headerlink" title="CTC"></a>CTC</h3><h4 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h4><p>​       CTC本质上就是一个序列学习任务中使用到的encoder-decoder网络结构：</p>
+<p><img src="/2021/10/08/CTC/12.jpg" srcset="/img/loading.gif" lazyload style="zoom:40%;"></p>
+<p>​        在序列学习任务中，模型对训练样本一般有这样的依赖条件：输入序列和输出序列之间的映射关系已经事先标注好了。比如，在词性标注任务中，训练样本中每个词（或短语）对应的词性会事先标注好，如下图（DT、NN等都是词性的标注<a target="_blank" rel="noopener" href="https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html">链接</a>）。由于输入序列和输出序列是一一对应的，所以模型的训练和预测都是端到端的，即可以根据输出序列和标注样本间的差异来直接定义模型的Loss函数，传统的RNN训练和预测方式可直接适用。</p>
 <p><img src="/2021/10/08/CTC/1.jpg" srcset="/img/loading.gif" lazyload style="zoom:40%;"></p>
 <p>​        然而，在语音识别、手写字识别等任务中，由于音频数据和图像数据都是从现实世界中将模拟信号转为数字信号采集得到，这些数据天然就很难进行“分割”，这使得我们很难获取到包含输入序列和输出序列映射关系的大规模训练样本（人工标注成本巨高）。因此，在这种条件下，RNN无法直接进行端到端的训练和预测。</p>
 <p>​        如下图，输入是“apple”对应的一段说话音频和手写字图片，从连续的音频信号和图像信号中逐一分割并标注出对应的输出序列非常费时费力，在大规模训练下这种数据要求是完全不切实际的。而如果输入序列和输出序列之间映射关系没有提前标注好，那传统的RNN训练方式就不能直接适用了，无法直接对音频数据和图像数据进行训练。</p>
@@ -246,7 +248,7 @@
 </ol>
 <h5 id="2-1-对齐方式"><a href="#2-1-对齐方式" class="headerlink" title="2.1 对齐方式"></a>2.1 对齐方式</h5><p>CTC本身是不需要对齐的，但是我们需要知道 $X$ 的输出路径和最终输出结果的对应关系，因为在CTC中，多个输出路径可能对应一个输出结果。例如在语音识别的任务中，输入 $X$ 是“CAT”的语音，输出 $Y$ 是文本[C, A, T]。将 $X$ 分割成若干个语音帧，每一帧得到一个输出，一个最简单的解决方案是合并连续重复出现的字母：</p>
 <p><img src="/2021/10/08/CTC/4.jpg" srcset="/img/loading.gif" lazyload style="zoom:50%;"></p>
-<p>有两个缺点：</p>
+<p>直接这样对齐有两个缺点：</p>
 <ol>
 <li>几乎不可能将 $X$的每个时间片都和输出Y对应上，例如OCR中字符的间隔，语音识别中的停顿;</li>
 <li>不能处理有连续重复字符出现的情况，例如单词“HELLO”，按照上面的算法，输出的是“HELO”而非“HELLO”。</li>
@@ -261,7 +263,8 @@ P(Y|X)=\sum_{o\in O} P(o|X) = \sum_{o\in O} \prod_{t=1}^T p_t(o_t|x_t)</script><
 <p>因此，只需要穷举出所有的$O$ ，累加一起即可得到$P(Y|X)$，从而使得RNN模型对最终的label进行建模。</p>
 <p>对于一个训练集合$S{(X,Y)}$ ，CTC的损失函数可定义为训练集S所有样本的负对数似然概率之和：</p>
 <script type="math/tex; mode=display">
-L(S) = -\sum_{(X,Y)\in S} ln(P(Y|X))</script><p>但这样的CTC算法存在性能问题，对于一个时间片长度为 $T$ 的 $N$ 分类任务，所有可能的路径数为 $T^N$ ，在很多情况下，用于计算Loss几乎是不现实的。在CTC中参照了HMM中的算法，采用了动态规划的思想来进行计算.</p>
+L(S) = -\sum_{(X,Y)\in S} ln(P(Y|X))</script><p><img src="/2021/10/08/CTC/13.jpg" srcset="/img/loading.gif" lazyload style="zoom:80%;"></p>
+<p>但这样的CTC算法存在性能问题，对于一个时间片长度为 $T$ 的 $N$ 分类任务，所有可能的路径数为 $T^N$ ，在很多情况下，用于计算Loss几乎是不现实的。在CTC中参照了HMM中的算法，采用了动态规划的思想来进行计算.</p>
 <h5 id="2-3-前后向概率及训练"><a href="#2-3-前后向概率及训练" class="headerlink" title="2.3 前后向概率及训练"></a>2.3 前后向概率及训练</h5><p>为了更形象表示问题的搜索空间，将所有的路径放在坐标轴中，并把输出序列$Y=[y_1,y_2,…,y_U]$做标准化处理，输出序列中间和头尾都加上$\epsilon$，得到$Z=[\epsilon, y_1,\epsilon,y_2,…,y_U,\epsilon]$, 横轴的单位是$X$对应的时间步， 纵轴是标签$Y$插入$\epsilon$后的序列$Z$，例如：</p>
 <script type="math/tex; mode=display">
 Y=ZOO \Rightarrow Z=\epsilon Z \epsilon O \epsilon O \epsilon</script><p>以“ZOO”这个标签为例，按照时间步（T=9）展开，则可将$P(Y|X)$ 的所有可能的合法路径表示如下图：</p>
@@ -283,7 +286,6 @@ Y=ZOO \Rightarrow Z=\epsilon Z \epsilon O \epsilon O \epsilon</script><p>以“Z
 \alpha_1(2)=P(z_1|x_1) \\
 \alpha_1(s)=0, s\gt2
 \end{cases}</script><script type="math/tex; mode=display">
-
 迭代计算  \alpha_t(s) = 
 \begin{cases}
 (\alpha_{t-1}(s) +\alpha_{t-1}(s-1))*p_t(z_s|x_t),  如果z_s=\epsilon 或z_s=z_{s-2} \\
@@ -304,7 +306,8 @@ Y=ZOO \Rightarrow Z=\epsilon Z \epsilon O \epsilon O \epsilon</script><p>以“Z
 \end{cases}</script><p>利用前向概率和后向概率计算CTC的损失函数：</p>
 <script type="math/tex; mode=display">
 P(Y|X)=\sum_{s=1}^{2U+1} \frac {\alpha_t(s)\beta_t(s)}{P(z_s|x_t)} \\</script><script type="math/tex; mode=display">
-L(S) = -\sum_{(X,Y)\in S} ln(P(Y|X)) =-\sum_{(X,Y)\in S}ln(\sum_{s=1}^{2U+1} \frac {\alpha_t(s)\beta_t(s)}{P(z_s|x_t)})</script><p>由此，即可用BPTT算法对CTC进行训练。</p>
+L(S) = -\sum_{(X,Y)\in S} ln(P(Y|X)) =-\sum_{(X,Y)\in S}ln(\sum_{s=1}^{2U+1} \frac {\alpha_t(s)\beta_t(s)}{P(z_s|x_t)})</script><p>由此，即可用BPTT算法对CTC进行训练：</p>
+<p><img src="/2021/10/08/CTC/11.jpg" srcset="/img/loading.gif" lazyload style="zoom:80%;"></p>
 <h4 id="3-解码"><a href="#3-解码" class="headerlink" title="3. 解码"></a>3. 解码</h4><p>给定一个输入序列 $X$ ，我们需要找到最可能的输出:</p>
 <script type="math/tex; mode=display">
 Y^*=arg\max_YP(Y|X)</script><p>两种方案，一种是Greedy Search，第二种是Beam search</p>
