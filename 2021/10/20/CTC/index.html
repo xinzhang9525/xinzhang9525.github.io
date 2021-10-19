@@ -275,10 +275,12 @@ Y=ZOO \Rightarrow Z=\epsilon Z \epsilon O \epsilon O \epsilon</script><p>以“Z
 <p><strong>Case 1</strong>:   </p>
 <p>如果 $z_s=\epsilon$, 则 $\alpha_t(s)$ 只能由 $\alpha_{t-1}(s_{t-1})$ 或者 $\alpha_{t-1}(s)$ 得到，如果$z_s\ne\epsilon$ 但$z_s$为连续字符，即$z_s=z_{s-2}$，则 $\alpha_t(s)$ 也只能由 $\alpha_{t-1}(s-1)$ 或者 $\alpha_{t-1}(s)$ 得到，即：</p>
 <script type="math/tex; mode=display">
-\alpha_t(s) = (\alpha_{t-1}(s) +\alpha_{t-1}(s-1))*p_t(z_s|x_t)</script><p><strong>Case 2</strong>:   </p>
+\alpha_t(s) = (\alpha_{t-1}(s) +\alpha_{t-1}(s-1))*p_t(z_s|x_t)</script><p><img src="/2021/10/20/CTC/8-1.jpg" srcset="/img/loading.gif" lazyload style="zoom:80%;"></p>
+<p><strong>Case 2</strong>:   </p>
 <p>如果$z_s\ne\epsilon$ 且不为连续字符，则$\alpha_t(s)$ 可以由 $\alpha_{t-1}(s_{t-2})$ ， $\alpha_{t-1}(s_{t-1})$ 以及 $\alpha_{t-1}(s)$ 得到，即：</p>
 <script type="math/tex; mode=display">
-\alpha_t(s) = (\alpha_{t-1}(s) +\alpha_{t-1}(s-1)+\alpha_{t-1}(s-2))*p_t(z_s|x_t)</script><p>得到CTC的前向概率计算：</p>
+\alpha_t(s) = (\alpha_{t-1}(s) +\alpha_{t-1}(s-1)+\alpha_{t-1}(s-2))*p_t(z_s|x_t)</script><p><img src="/2021/10/20/CTC/8-2.jpg" srcset="/img/loading.gif" lazyload style="zoom:80%;"></p>
+<p>可得到CTC的前向概率递推计算：</p>
 <script type="math/tex; mode=display">
 初始化 =
 \begin{cases}
