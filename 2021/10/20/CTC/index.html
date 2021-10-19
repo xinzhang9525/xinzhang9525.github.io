@@ -228,7 +228,8 @@
             <h1 style="display: none">CTC (Connectionist Temporal Classification)</h1>
             
             <div class="markdown-body">
-              <h3 id="CTC"><a href="#CTC" class="headerlink" title="CTC"></a>CTC</h3><h4 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h4><p>​       CTC本质上就是一个序列学习任务中使用到的encoder-decoder网络结构：</p>
+              <h3 id="CTC"><a href="#CTC" class="headerlink" title="CTC"></a>CTC</h3><p>论文地址：<a target="_blank" rel="noopener" href="http://people.idsia.ch/~santiago/papers/icml2006.pdf">http://people.idsia.ch/~santiago/papers/icml2006.pdf</a></p>
+<h4 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h4><p>​       CTC本质上就是一个序列学习任务中使用到的encoder-decoder网络结构：</p>
 <p><img src="/2021/10/20/CTC/12.jpg" srcset="/img/loading.gif" lazyload style="zoom:40%;"></p>
 <p>​        在序列学习任务中，模型对训练样本一般有这样的依赖条件：输入序列和输出序列之间的映射关系已经事先标注好了。比如，在词性标注任务中，训练样本中每个词（或短语）对应的词性会事先标注好，如下图（DT、NN等都是词性的标注<a target="_blank" rel="noopener" href="https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html">链接</a>）。由于输入序列和输出序列是一一对应的，所以模型的训练和预测都是端到端的，即可以根据输出序列和标注样本间的差异来直接定义模型的Loss函数，传统的RNN训练和预测方式可直接适用。</p>
 <p><img src="/2021/10/20/CTC/1.jpg" srcset="/img/loading.gif" lazyload style="zoom:40%;"></p>
@@ -239,7 +240,7 @@
 <p>对音频“分割”并标注映射关系的数据依赖是不切实际的，实际情况是对音频按照时间窗口滑动来提取特征，例如按照每帧音频提取特征：</p>
 <p><img src="/2021/10/20/CTC/6.jpg" srcset="/img/loading.gif" lazyload style="zoom:50%;"></p>
 <p>因此，在语音识别、手写数字识别等领域中，由于数据天然无法切割，且难以标注出输入和输出的序列映射关系，导致传统训练方法不能直接适用。那么，如何让RNN模型实现端到端的训练成为了关键问题。</p>
-<p>Connectionist Temporal Classification（CTC）<a target="_blank" rel="noopener" href="http://people.idsia.ch/~santiago/papers/icml2006.pdf">论文</a>Alex Graves等人在ICML 2006上提出的一种端到端的RNN训练方法，它可以让RNN直接对序列数据进行学习，而无需事先标注好训练数据中输入序列和输入序列的映射关系。</p>
+<p>Connectionist Temporal Classification（CTC）是Alex Graves等人在ICML 2006上提出的一种端到端的RNN训练方法，它可以让RNN直接对序列数据进行学习，而无需事先标注好训练数据中输入序列和输入序列的映射关系。</p>
 <h4 id="2-CTC算法"><a href="#2-CTC算法" class="headerlink" title="2.CTC算法"></a>2.CTC算法</h4><p>给定输入序列$X=[x_1,x_2,…,x_T]$ 以及对应的标签数据$Y=[y_1,y_2,…,y_U]$  ,如语音识别中的音频文件和文本文件。我们的目的是找到 $X$ 到 $Y$ 的一个映射函数</p>
 <p>对比传统的分类方法，有如下难点：</p>
 <ol>
