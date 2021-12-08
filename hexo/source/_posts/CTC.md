@@ -2,16 +2,22 @@
 title: CTC (Connectionist Temporal Classification)
 excerpt: 序列学习; End2End;
 index_img: /img/post/answer/lm/lm-smoothing.jpeg
-date: 2021-10-08 10:30:00
+date: 2021-10-20 10:30:00
 categories: [语音识别]
 comments: true
 math: true
 ---
 ### CTC
 
+论文地址：[http://people.idsia.ch/~santiago/papers/icml2006.pdf](http://people.idsia.ch/~santiago/papers/icml2006.pdf)
+
 #### 1.背景
 
-​        在序列学习任务中，模型对训练样本一般有这样的依赖条件：输入序列和输出序列之间的映射关系已经事先标注好了。比如，在词性标注任务中，训练样本中每个词（或短语）对应的词性会事先标注好，如下图（DT、NN等都是词性的标注，含义可参考[链接](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)）。由于输入序列和输出序列是一一对应的，所以模型的训练和预测都是端到端的，即可以根据输出序列和标注样本间的差异来直接定义模型的Loss函数，传统的RNN训练和预测方式可直接适用。
+​       CTC本质上就是一个序列学习任务中使用到的encoder-decoder网络结构：
+
+<img src="12.jpg"  style="zoom:40%;" />
+
+​        在序列学习任务中，模型对训练样本一般有这样的依赖条件：输入序列和输出序列之间的映射关系已经事先标注好了。比如，在词性标注任务中，训练样本中每个词（或短语）对应的词性会事先标注好，如下图（DT、NN等都是词性的标注[链接](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)）。由于输入序列和输出序列是一一对应的，所以模型的训练和预测都是端到端的，即可以根据输出序列和标注样本间的差异来直接定义模型的Loss函数，传统的RNN训练和预测方式可直接适用。
 
 <img src="1.jpg"  style="zoom:40%;" />
 
@@ -29,7 +35,7 @@ math: true
 
 <img src="6.jpg"  style="zoom:50%;" />
 
-因此，在语音识别、图像识别等领域中，由于数据天然无法切割，且难以标注出输入和输出的序列映射关系，导致传统训练方法不能直接适用。那么，如何让RNN模型实现端到端的训练成为了关键问题。
+因此，在语音识别、手写数字识别等领域中，由于数据天然无法切割，且难以标注出输入和输出的序列映射关系，导致传统训练方法不能直接适用。那么，如何让RNN模型实现端到端的训练成为了关键问题。
 
 Connectionist Temporal Classification（CTC）是Alex Graves等人在ICML 2006上提出的一种端到端的RNN训练方法，它可以让RNN直接对序列数据进行学习，而无需事先标注好训练数据中输入序列和输入序列的映射关系。
 
@@ -50,7 +56,7 @@ CTC本身是不需要对齐的，但是我们需要知道 $X$ 的输出路径和
 
 <img src="4.jpg"  style="zoom:50%;" />
 
-有两个缺点：
+直接这样对齐有两个缺点：
 
 1. 几乎不可能将 $X$的每个时间片都和输出Y对应上，例如OCR中字符的间隔，语音识别中的停顿;
 2. 不能处理有连续重复字符出现的情况，例如单词“HELLO”，按照上面的算法，输出的是“HELO”而非“HELLO”。
@@ -77,6 +83,8 @@ $$
 $$
 L(S) = -\sum_{(X,Y)\in S} ln(P(Y|X))
 $$
+<img src="13.jpg"  style="zoom:80%;" />
+
 但这样的CTC算法存在性能问题，对于一个时间片长度为 $T$ 的 $N$ 分类任务，所有可能的路径数为 $T^N$ ，在很多情况下，用于计算Loss几乎是不现实的。在CTC中参照了HMM中的算法，采用了动态规划的思想来进行计算.
 
 
@@ -103,13 +111,17 @@ $$
 $$
 \alpha_t(s) = (\alpha_{t-1}(s) +\alpha_{t-1}(s-1))*p_t(z_s|x_t)
 $$
+<img src="8_1.png" style="zoom:80%;" />
+
 **Case 2**:   
 
 如果$z_s\ne\epsilon$ 且不为连续字符，则$\alpha_t(s)$ 可以由 $\alpha_{t-1}(s_{t-2})$ ， $\alpha_{t-1}(s_{t-1})$ 以及 $\alpha_{t-1}(s)$ 得到，即：
 $$
 \alpha_t(s) = (\alpha_{t-1}(s) +\alpha_{t-1}(s-1)+\alpha_{t-1}(s-2))*p_t(z_s|x_t)
 $$
-得到CTC的前向概率计算：
+<img src="8_2.png" style="zoom:80%;" />
+
+可得到CTC的前向概率递推计算：
 $$
 初始化 =
 \begin{cases}
@@ -120,7 +132,6 @@ $$
 $$
 
 $$
-
 迭代计算  \alpha_t(s) = 
 \begin{cases}
 (\alpha_{t-1}(s) +\alpha_{t-1}(s-1))*p_t(z_s|x_t),  如果z_s=\epsilon 或z_s=z_{s-2} \\
@@ -156,7 +167,9 @@ $$
 L(S) = -\sum_{(X,Y)\in S} ln(P(Y|X)) =-\sum_{(X,Y)\in S}ln(\sum_{s=1}^{2U+1} \frac {\alpha_t(s)\beta_t(s)}{P(z_s|x_t)})
 $$
 
-由此，即可用BPTT算法对CTC进行训练。
+由此，即可用BPTT算法对CTC进行训练：
+
+<img src="11.jpg"  style="zoom:80%;" />
 
 
 
@@ -164,10 +177,8 @@ $$
 
 给定一个输入序列 $X$ ，我们需要找到最可能的输出:
 $$
-Y^*=arg\max_YP(Y|X)
+Y^*=arg\max_YP(Y|X)=arg\max_YP(Y|X)\sum_{o\in O(Y)} P(o|X)
 $$
-两种方案，一种是Greedy Search，第二种是Beam search
-
 **Greedy Search**: 每个时间片均取该时间片概率最高的节点作为输出
 
 <img src="9.jpg"  style="zoom:60%;" />
@@ -177,3 +188,12 @@ $$
 **Beam search**
 
 <img src="10.jpg"  style="zoom:60%;" />
+
+
+
+**Prefix Beam Search**
+
+有许多不同的路径在many-to-one map的过程中是相同的，但beam search却会将一部分舍去，这导致了很多有用的信息被舍弃了，基本的思想是在搜索过程中不断的合并相同的前缀：
+
+<img src="14.jpg"  style="zoom:60%;" />
+
